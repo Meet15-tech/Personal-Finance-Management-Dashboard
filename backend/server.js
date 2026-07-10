@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
+const connectDB = require('./config/db');
 
 // Load environment variables
 dotenv.config();
@@ -22,10 +23,13 @@ app.get('/api/health', (req, res) => {
 });
 
 // Centralized app initialization (can be expanded later)
-const startServer = () => {
+const startServer = async () => {
   try {
+    // Connect to MongoDB
+    await connectDB();
+
     app.listen(PORT, () => {
-      console.log(`Server is running on port ${PORT}`);
+      console.log(`Server Running on Port ${PORT}`);
     });
   } catch (error) {
     console.error('Failed to start server:', error);
