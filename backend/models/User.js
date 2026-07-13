@@ -1,64 +1,74 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
-/**
- * User Schema Definition
- * Includes essential user attributes, defaults, and security configurations.
- * Note: Password hashing will be implemented on Day 3.
- */
 const userSchema = new mongoose.Schema(
   {
     fullName: {
       type: String,
-      required: [true, 'Full name is required'],
+      required: [true, "Full name is required"],
       trim: true,
+      minlength: [2, "Full name must contain at least 2 characters"],
+      maxlength: [60, "Full name cannot exceed 60 characters"],
     },
+
     email: {
       type: String,
-      required: [true, 'Email is required'],
+      required: [true, "Email is required"],
       unique: true,
-      lowercase: true,
       trim: true,
+      lowercase: true,
+      maxlength: [120, "Email cannot exceed 120 characters"],
       match: [
-        /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
-        'Please fill a valid email address',
+        /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+        "Please provide a valid email address",
       ],
     },
+
     password: {
       type: String,
-      required: [true, 'Password is required'],
-      minlength: [6, 'Password must be at least 6 characters long'],
+      required: [true, "Password is required"],
+      minlength: [8, "Password must contain at least 8 characters"],
+      select: false,
     },
+
     profileImage: {
       type: String,
-      default: '',
       trim: true,
+      default: "",
     },
+
     currency: {
       type: String,
-      default: 'INR',
       trim: true,
+      uppercase: true,
+      default: "INR",
     },
+
     monthlyIncome: {
       type: Number,
+      min: [0, "Monthly income cannot be negative"],
       default: 0,
-      min: [0, 'Monthly income cannot be negative'],
     },
+
     role: {
       type: String,
-      default: 'user',
-      enum: ['user', 'admin'],
-      trim: true,
+      enum: {
+        values: ["user", "admin"],
+        message: "{VALUE} is not a supported role",
+      },
+      default: "user",
     },
+
     isVerified: {
       type: Boolean,
       default: false,
     },
   },
   {
-    timestamps: true, // Automatically manages createdAt and updatedAt fields
+    timestamps: true,
+    versionKey: false,
   }
 );
 
-const User = mongoose.model('User', userSchema);
+const User = mongoose.model("User", userSchema);
 
 module.exports = User;
