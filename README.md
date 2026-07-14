@@ -6,7 +6,7 @@
 ![React](https://img.shields.io/badge/React-19-blue)
 ![Node.js](https://img.shields.io/badge/Node.js-Express-success)
 ![MongoDB](https://img.shields.io/badge/Database-MongoDB-success)
-![Status](https://img.shields.io/badge/Status-Week%201%20Day%203-orange)
+![Status](https://img.shields.io/badge/Status-Week%201%20Day%204-brightgreen)
 ![License](https://img.shields.io/badge/License-MIT-blue)
 
 </p>
@@ -218,6 +218,8 @@ CLIENT_URL=http://localhost:5173
 | GET | / | Backend Status |
 | GET | /api/health | Health Check |
 | POST | /api/auth/register | User Registration |
+| POST | /api/auth/login | User Login |
+| GET | /api/auth/profile *(or /api/auth/me)* | Protected Route |
 
 ---
 
@@ -283,11 +285,64 @@ feat: implement user registration with password hashing and JWT
 
 ---
 
-### ⏳ Day 4
+---
+
+### ✅ Day 4 — User Login & JWT Authentication
+
+Completed
 
 - User Login API
+- Password Verification using bcrypt.compare()
 - JWT Authentication Middleware
-- Protected Routes
+- Protected Route Implementation
+- Token Verification
+- Authentication Error Handling
+- Postman API Testing
+
+**Implemented Features**
+
+- Verify registered user credentials
+- Compare hashed passwords securely
+- Generate JWT token on successful login
+- Protect private routes using authentication middleware
+- Validate Bearer Token from request headers
+- Return authenticated user information
+- Handle unauthorized and invalid token requests
+
+**API Endpoints**
+
+| Method | Endpoint | Description |
+|---------|----------|-------------|
+| POST | /api/auth/login | User Login |
+| GET | /api/auth/profile *(or /api/auth/me)* | Protected User Profile |
+
+**Testing**
+
+- ✅ Successful Login
+- ✅ Invalid Password Handling
+- ✅ Invalid Email Handling
+- ✅ JWT Token Generation
+- ✅ Protected Route Access
+- ✅ Unauthorized Request Handling
+- ✅ Invalid Token Handling
+- ✅ Postman Tested
+
+**Commit**
+
+```text
+feat: implement login API and JWT authentication middleware
+```
+
+---
+
+### ⏳ Day 5
+
+- Frontend Authentication
+- Login Page
+- Registration Page
+- Authentication Context
+- Protected Routes (React)
+- Axios Integration
 
 ---
 
