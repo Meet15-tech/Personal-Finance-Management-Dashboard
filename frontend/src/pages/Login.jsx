@@ -1,30 +1,106 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import { useState } from "react";
+import {
+  Link,
+  Navigate,
+  useLocation,
+  useNavigate,
+} from "react-router-dom";
+import useAuth from "../hooks/useAuth";
 
-const Login = () => {
+export default function Login() {
+  const [credentials, setCredentials] = useState({
+    email: "",
+    password: "",
+  });
+  const [error, setError] = useState("");
+
+  const { login, loading, isAuthenticated } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const destination = location.state?.from || "/dashboard";
+
+  if (isAuthenticated) {
+    return <Navigate to="/dashboard" replace />;
+  }
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+
+    setCredentials((currentCredentials) => ({
+      ...currentCredentials,
+      [name]: value,
+    }));
+
+    setError("");
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    try {
+      await login({
+        email: credentials.email.trim(),
+        password: credentials.password,
+      });
+
+      navigate(destination, { replace: true });
+    } catch (requestError) {
+      setError(
+        requestError.response?.data?.message ||
+        requestError.message ||
+        "Login failed. Please check your credentials."
+      );
+    }
+  };
+
   return (
-    <div className="flex justify-center items-center min-h-[calc(100vh-4rem)] p-4">
-      <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-100 w-full max-w-md">
-        <h2 className="text-2xl font-bold text-center mb-6">Welcome Back</h2>
-        <form className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
-            <input type="email" className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none" placeholder="Enter your email" />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
-            <input type="password" className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none" placeholder="Enter your password" />
-          </div>
-          <button type="button" className="w-full bg-blue-600 text-white py-2 rounded-lg font-semibold hover:bg-blue-700 transition-colors">
-            Login
+    <main className="auth-page">
+      <section className="auth-card">
+        <div className="auth-heading">
+          <p className="eyebrow">PFM Dashboard</p>
+          <h1>Welcome back</h1>
+          <p>Sign in to continue managing your finances.</p>
+        </div>
+
+        {error && <div className="alert alert-error">{error}</div>}
+
+        <form onSubmit={handleSubmit} className="auth-form">
+          <label>
+            Email address
+            <input
+              type="email"
+              name="email"
+              value={credentials.email}
+              onChange={handleChange}
+              placeholder="meet@example.com"
+              autoComplete="email"
+              required
+            />
+          </label>
+
+          <label>
+            Password
+            <input
+              type="password"
+              name="password"
+              value={credentials.password}
+              onChange={handleChange}
+              placeholder="Enter your password"
+              autoComplete="current-password"
+              required
+            />
+          </label>
+
+          <button type="submit" disabled={loading}>
+            {loading ? "Signing in..." : "Sign in"}
           </button>
         </form>
-        <p className="mt-4 text-center text-sm text-gray-600">
-          Don't have an account? <Link to="/register" className="text-blue-600 hover:underline">Register</Link>
-        </p>
-      </div>
-    </div>
-  );
-};
 
-export default Login;
+        <p className="auth-switch">
+          New to PFM? <Link to="/register">Create an account</Link>
+        </p>
+      </section>
+    </main>
+  );
+}

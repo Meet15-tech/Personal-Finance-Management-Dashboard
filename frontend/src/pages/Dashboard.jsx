@@ -1,30 +1,60 @@
-import React from 'react';
+import useAuth from "../hooks/useAuth";
 
-const Dashboard = () => {
+export default function Dashboard() {
+  const { user, logout } = useAuth();
+
   return (
-    <div className="space-y-6">
-      <h1 className="text-2xl font-bold text-gray-900">Dashboard Overview</h1>
-      
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-          <h3 className="text-gray-500 text-sm font-medium">Total Balance</h3>
-          <p className="text-3xl font-bold text-gray-900 mt-2">$12,450.00</p>
+    <main className="dashboard-page">
+      <header className="dashboard-header">
+        <div>
+          <p className="eyebrow">PFM Dashboard</p>
+          <h1>Welcome, {user?.fullName || "User"}</h1>
+          <p>You are successfully authenticated.</p>
         </div>
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-          <h3 className="text-gray-500 text-sm font-medium">Monthly Income</h3>
-          <p className="text-3xl font-bold text-green-600 mt-2">+$4,200.00</p>
-        </div>
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-          <h3 className="text-gray-500 text-sm font-medium">Monthly Expenses</h3>
-          <p className="text-3xl font-bold text-red-600 mt-2">-$1,850.00</p>
-        </div>
-      </div>
 
-      <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 h-96 flex items-center justify-center">
-        <p className="text-gray-500">Charts (Recharts) will be implemented here</p>
-      </div>
-    </div>
+        <button
+          type="button"
+          className="secondary-button"
+          onClick={logout}
+        >
+          Logout
+        </button>
+      </header>
+
+      <section className="dashboard-grid">
+        <article className="dashboard-card">
+          <span>Email</span>
+          <strong>{user?.email || "Not available"}</strong>
+        </article>
+
+        <article className="dashboard-card">
+          <span>Currency</span>
+          <strong>{user?.currency || "INR"}</strong>
+        </article>
+
+        <article className="dashboard-card">
+          <span>Monthly income</span>
+          <strong>
+            {user?.currency || "INR"}{" "}
+            {Number(user?.monthlyIncome || 0).toLocaleString()}
+          </strong>
+        </article>
+
+        <article className="dashboard-card">
+          <span>Account status</span>
+          <strong>
+            {user?.isVerified ? "Verified" : "Not verified"}
+          </strong>
+        </article>
+      </section>
+
+      <section className="dashboard-placeholder">
+        <h2>Financial dashboard coming next</h2>
+        <p>
+          Accounts, transactions, budgets, analytics, and Plaid integration
+          will be added in the upcoming development phases.
+        </p>
+      </section>
+    </main>
   );
-};
-
-export default Dashboard;
+}
