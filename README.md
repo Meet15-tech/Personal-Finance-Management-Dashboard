@@ -6,7 +6,7 @@
 ![React](https://img.shields.io/badge/React-19-blue)
 ![Node.js](https://img.shields.io/badge/Node.js-Express-success)
 ![MongoDB](https://img.shields.io/badge/Database-MongoDB-success)
-![Status](https://img.shields.io/badge/Status-Week%201%20Day%204-brightgreen) 
+![Status](https://img.shields.io/badge/Status-Week%201%20Completed-success)
 ![License](https://img.shields.io/badge/License-MIT-blue)
 
 </p>
@@ -219,7 +219,7 @@ CLIENT_URL=http://localhost:5173
 | GET | /api/health | Health Check |
 | POST | /api/auth/register | User Registration |
 | POST | /api/auth/login | User Login |
-| GET | /api/auth/profile *(or /api/auth/me)* | Protected Route |
+| GET | /api/auth/profile | Protected User Profile |
 
 ---
 
