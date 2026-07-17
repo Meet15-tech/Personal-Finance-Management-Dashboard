@@ -1,6 +1,10 @@
 const bcrypt = require("bcryptjs");
 const User = require("../models/User");
 const generateToken = require("../utils/generateToken");
+const {
+    validateRegistrationInput,
+    validateLoginInput,
+} = require("../utils/validation");
 
 /**
  * Register a new user.
@@ -10,36 +14,18 @@ const generateToken = require("../utils/generateToken");
  */
 const registerUser = async (req, res) => {
     try {
-        const {
-            fullName,
-            email,
-            password,
-            currency,
-            monthlyIncome,
-        } = req.body;
+        const validation = validateRegistrationInput(req.body);
 
-        if (!fullName || !email || !password) {
+        if (!validation.isValid) {
             return res.status(400).json({
                 success: false,
-                message: "Full name, email, and password are required",
+                message: "Please correct the highlighted fields",
+                errors: validation.errors,
             });
         }
 
-        if (typeof fullName !== "string" || typeof email !== "string") {
-            return res.status(400).json({
-                success: false,
-                message: "Full name and email must be valid text values",
-            });
-        }
-
-        if (typeof password !== "string" || password.length < 8) {
-            return res.status(400).json({
-                success: false,
-                message: "Password must contain at least 8 characters",
-            });
-        }
-
-        const normalizedEmail = email.trim().toLowerCase();
+        const { fullName, email, password, currency, monthlyIncome } = validation.cleanedData;
+        const normalizedEmail = email;
 
         const existingUser = await User.findOne({
             email: normalizedEmail,
@@ -55,14 +41,11 @@ const registerUser = async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, 12);
 
         const user = await User.create({
-            fullName: fullName.trim(),
+            fullName,
             email: normalizedEmail,
             password: hashedPassword,
-            currency: currency || "INR",
-            monthlyIncome:
-                monthlyIncome === undefined || monthlyIncome === ""
-                    ? 0
-                    : Number(monthlyIncome),
+            currency,
+            monthlyIncome,
         });
 
         const token = generateToken(user._id.toString());
@@ -123,19 +106,20 @@ const registerUser = async (req, res) => {
  */
 const loginUser = async (req, res) => {
     try {
-        const { email, password } = req.body;
+        const validation = validateLoginInput(req.body);
 
-        if (!email || !password) {
+        if (!validation.isValid) {
             return res.status(400).json({
                 success: false,
                 message: "Email and password are required",
+                errors: validation.errors,
             });
         }
 
-        const normalizedEmail = email.trim().toLowerCase();
+        const { email, password } = validation.cleanedData;
 
         // Find user and explicitly select password field
-        const user = await User.findOne({ email: normalizedEmail }).select("+password");
+        const user = await User.findOne({ email }).select("+password");
 
         if (!user) {
             return res.status(401).json({

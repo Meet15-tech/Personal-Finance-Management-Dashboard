@@ -151,6 +151,12 @@ a:hover {
   color: #a61b1b;
 }
 
+.field-hint {
+  color: #b42318;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
 .dashboard-page {
   width: min(1180px, calc(100% - 32px));
   margin: 0 auto;

@@ -14,6 +14,7 @@ const initialForm = {
 export default function Register() {
   const [formData, setFormData] = useState(initialForm);
   const [error, setError] = useState("");
+  const [fieldError, setFieldError] = useState("");
 
   const { register, loading, isAuthenticated } = useAuth();
   const navigate = useNavigate();
@@ -31,6 +32,7 @@ export default function Register() {
     }));
 
     setError("");
+    setFieldError("");
   };
 
   const validateForm = () => {
@@ -42,6 +44,11 @@ export default function Register() {
       return "Email is required";
     }
 
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailPattern.test(formData.email.trim())) {
+      return "Please provide a valid email address";
+    }
+
     if (formData.password.length < 8) {
       return "Password must contain at least 8 characters";
     }
@@ -50,10 +57,7 @@ export default function Register() {
       return "Passwords do not match";
     }
 
-    if (
-      formData.monthlyIncome &&
-      Number(formData.monthlyIncome) < 0
-    ) {
+    if (formData.monthlyIncome && Number(formData.monthlyIncome) < 0) {
       return "Monthly income cannot be negative";
     }
 
@@ -67,6 +71,7 @@ export default function Register() {
 
     if (validationError) {
       setError(validationError);
+      setFieldError(validationError);
       return;
     }
 
@@ -83,11 +88,12 @@ export default function Register() {
 
       navigate("/dashboard", { replace: true });
     } catch (requestError) {
-      setError(
-        requestError.response?.data?.message ||
-        requestError.message ||
-        "Registration failed. Please try again."
-      );
+      const serverMessage = requestError.response?.data?.message;
+      const serverErrors = requestError.response?.data?.errors;
+      const fallbackMessage = serverErrors?.[0] || serverMessage || "Registration failed. Please try again.";
+
+      setError(fallbackMessage);
+      setFieldError(serverErrors?.[0] || "");
     }
   };
 

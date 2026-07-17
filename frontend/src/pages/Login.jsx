@@ -13,6 +13,7 @@ export default function Login() {
     password: "",
   });
   const [error, setError] = useState("");
+  const [fieldError, setFieldError] = useState("");
 
   const { login, loading, isAuthenticated } = useAuth();
   const navigate = useNavigate();
@@ -33,10 +34,16 @@ export default function Login() {
     }));
 
     setError("");
+    setFieldError("");
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+
+    if (!credentials.email.trim() || !credentials.password) {
+      setFieldError("Please enter both your email and password.");
+      return;
+    }
 
     try {
       await login({
@@ -46,11 +53,12 @@ export default function Login() {
 
       navigate(destination, { replace: true });
     } catch (requestError) {
-      setError(
-        requestError.response?.data?.message ||
-        requestError.message ||
-        "Login failed. Please check your credentials."
-      );
+      const serverMessage = requestError.response?.data?.message;
+      const serverErrors = requestError.response?.data?.errors;
+      const fallbackMessage = serverErrors?.[0] || serverMessage || "Login failed. Please check your credentials.";
+
+      setError(fallbackMessage);
+      setFieldError(serverErrors?.[0] || "");
     }
   };
 
@@ -90,6 +98,7 @@ export default function Login() {
               autoComplete="current-password"
               required
             />
+            {fieldError && !credentials.password && <span className="field-hint">Password is required</span>}
           </label>
 
           <button type="submit" disabled={loading}>
