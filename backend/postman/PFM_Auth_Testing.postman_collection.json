@@ -1,0 +1,146 @@
+{
+  "info": {
+    "_postman_id": "893c52e8-d1c8-47bc-8772-a16dfebf6cc0",
+    "name": "PFM Auth API Testing",
+    "description": "Postman collection for Day 7 auth validation, error handling, and protected route testing",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:5050/api/health",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "5050",
+          "path": ["api", "health"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Register Valid User",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const response = pm.response.json();",
+              "pm.test('Status code is 201', () => pm.response.to.have.status(201));",
+              "pm.test('Response has token', () => response.success && Boolean(response.data && response.data.token));"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"fullName\": \"John Doe\",\n  \"email\": \"john@example.com\",\n  \"password\": \"securePassword123\",\n  \"currency\": \"USD\",\n  \"monthlyIncome\": 5000\n}"
+        },
+        "url": {
+          "raw": "http://localhost:5050/api/auth/register",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "5050",
+          "path": ["api", "auth", "register"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Login Valid User",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const response = pm.response.json();",
+              "if (response.success && response.data && response.data.token) {",
+              "  pm.environment.set('auth_token', response.data.token);",
+              "}",
+              "pm.test('Status code is 200', () => pm.response.to.have.status(200));"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"john@example.com\",\n  \"password\": \"securePassword123\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:5050/api/auth/login",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "5050",
+          "path": ["api", "auth", "login"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get User Profile (Protected)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{auth_token}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:5050/api/auth/profile",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "5050",
+          "path": ["api", "auth", "profile"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Register Invalid Payload",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"fullName\": \"J\",\n  \"email\": \"not-an-email\",\n  \"password\": \"1234\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:5050/api/auth/register",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "5050",
+          "path": ["api", "auth", "register"]
+        }
+      },
+      "response": []
+    }
+  ]
+}
