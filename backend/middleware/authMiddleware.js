@@ -1,52 +1,61 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 
-/**
- * Middleware to protect routes by verifying the JWT token.
- * Extracted token is decoded to find the user in the database.
- * The user object (excluding the password) is attached to `req.user`.
- */
 const protect = async (req, res, next) => {
-    let token;
+    try {
+        let token;
 
-    // Check for token in the Authorization header
-    if (
-        req.headers.authorization &&
-        req.headers.authorization.startsWith("Bearer")
-    ) {
-        try {
-            // Extract token from bearer token string
+        if (
+            req.headers.authorization &&
+            req.headers.authorization.startsWith("Bearer ")
+        ) {
             token = req.headers.authorization.split(" ")[1];
+        }
 
-            // Verify token
-            const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
-            // Get user from database, exclude password
-            req.user = await User.findById(decoded.userId);
-
-            if (!req.user) {
-                return res.status(401).json({
-                    success: false,
-                    message: "User not found with this token",
-                });
-            }
-
-            next();
-        } catch (error) {
-            console.error("Token verification failed:", error.message);
+        if (!token) {
             return res.status(401).json({
                 success: false,
-                message: "Not authorized, token failed or expired",
+                message: "Not authorized. Token is missing.",
             });
         }
-    }
 
-    if (!token) {
-        return res.status(401).json({
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+        const userId = decoded.id || decoded.userId;
+
+        const user = await User.findById(userId).select("-password");
+
+        if (!user) {
+            return res.status(401).json({
+                success: false,
+                message: "User associated with this token no longer exists.",
+            });
+        }
+
+        req.user = user;
+        next();
+    } catch (error) {
+        console.error("Authentication error:", error);
+
+        if (error.name === "TokenExpiredError") {
+            return res.status(401).json({
+                success: false,
+                message: "Token has expired. Please log in again.",
+            });
+        }
+
+        if (error.name === "JsonWebTokenError") {
+            return res.status(401).json({
+                success: false,
+                message: "Invalid authentication token.",
+            });
+        }
+
+        return res.status(500).json({
             success: false,
-            message: "Not authorized, no token provided",
+            message: "Authentication failed.",
         });
     }
 };
 
-module.exports = { protect };
+module.exports = protect;
