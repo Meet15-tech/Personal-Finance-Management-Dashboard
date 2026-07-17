@@ -626,6 +626,235 @@ The project is now ready to move into **Week 2**, where the focus shifts from au
 
 ---
 
+# ✅ Day 8 — Transaction Management Module
+
+## 📌 Objective
+
+The objective of Day 8 was to build the core **Transaction Management System**, enabling authenticated users to manage their financial records through secure CRUD (Create, Read, Update, Delete) operations. This module serves as the foundation for future dashboard analytics, budgeting, reports, and bank transaction synchronization.
+
+---
+
+## 🚀 Features Implemented
+
+### Backend Development
+
+- Designed and implemented the **Transaction** MongoDB model using Mongoose.
+- Established a relationship between users and transactions.
+- Implemented secure **JWT-protected Transaction APIs**.
+- Developed complete CRUD functionality for transactions.
+- Added server-side validation for transaction data.
+- Ensured each user can access only their own transactions.
+- Implemented proper HTTP status codes and structured API responses.
+
+---
+
+### 📂 Transaction Model
+
+The Transaction schema includes:
+
+- User Reference
+- Transaction Title
+- Amount
+- Transaction Type (Income / Expense)
+- Category
+- Description
+- Transaction Date
+- Payment Method
+- Created At
+- Updated At
+
+---
+
+### 🔐 Protected API Endpoints
+
+| Method | Endpoint | Description |
+|---------|----------|-------------|
+| POST | `/api/transactions` | Create Transaction |
+| GET | `/api/transactions` | Get All Transactions |
+| GET | `/api/transactions/:id` | Get Single Transaction |
+| PUT | `/api/transactions/:id` | Update Transaction |
+| DELETE | `/api/transactions/:id` | Delete Transaction |
+
+All endpoints are protected using JWT Authentication.
+
+---
+
+## 🎨 Frontend Development
+
+Developed the initial Transaction Management UI using React.
+
+### Components Created
+
+- Transactions Page
+- Transaction Form
+- Transaction Card
+- Transaction List
+- Dashboard Navigation
+
+---
+
+### Implemented UI Features
+
+- Add Transaction Form
+- Income & Expense Selection
+- Category Selection
+- Payment Method Selection
+- Date Picker
+- Description Field
+- Transaction Listing
+- Summary Cards
+- Delete Transaction Button
+- Dashboard Navigation
+
+---
+
+## 📊 Dashboard Summary Cards
+
+Implemented summary cards displaying:
+
+- Total Income
+- Total Expenses
+- Current Balance
+
+> **Note:** During Day 8, summary values are calculated from local state. Backend integration will be completed in a later phase.
+
+---
+
+## 🛡️ Backend Validation
+
+Implemented validation for:
+
+- Required Transaction Title
+- Amount greater than zero
+- Valid Transaction Type
+- Required Category
+- Valid Payment Method
+- Valid Date
+- JWT Authentication
+
+---
+
+## 🧪 API Testing
+
+Successfully tested all APIs using Postman.
+
+### Tested Endpoints
+
+- User Login
+- Create Transaction
+- Get Transactions
+- Get Transaction By ID
+- Update Transaction
+- Delete Transaction
+- Unauthorized Access
+- Validation Errors
+
+---
+
+## 🗄️ Database
+
+Successfully verified:
+
+- MongoDB Transaction Collection
+- User-wise Transaction Storage
+- Protected Database Access
+
+---
+
+## 📁 Project Structure
+
+### Backend
+
+```text
+backend/
+├── controllers/
+│   └── transactionController.js
+├── models/
+│   └── Transaction.js
+├── routes/
+│   └── transactionRoutes.js
+```
+
+### Frontend
+
+```text
+frontend/
+├── pages/
+│   └── Transactions.jsx
+├── components/
+│   └── transactions/
+│       ├── TransactionForm.jsx
+│       ├── TransactionList.jsx
+│       └── TransactionCard.jsx
+```
+
+---
+
+## 📌 Current Status
+
+### ✅ Completed
+
+- Transaction Database Model
+- Transaction CRUD APIs
+- JWT Protected Routes
+- Backend Validation
+- MongoDB Integration
+- Transaction Management UI
+- Dashboard Navigation
+- Summary Cards
+- API Testing
+
+### ⏳ Planned for Upcoming Days
+
+- Connect Frontend with Backend APIs
+- Persistent Transaction Storage
+- Dashboard Analytics
+- Budget Management
+- Savings Goals
+- Charts & Reports
+- Plaid Integration
+
+---
+
+## 📚 Technologies Used
+
+- React.js
+- Node.js
+- Express.js
+- MongoDB
+- Mongoose
+- JWT Authentication
+- Axios
+- React Router
+- Postman
+
+---
+
+## 🎯 Learning Outcomes
+
+- Built secure RESTful CRUD APIs.
+- Strengthened understanding of MongoDB relationships using Mongoose.
+- Implemented JWT-protected routes.
+- Developed reusable React components.
+- Designed a scalable transaction management architecture for future financial analytics.
+
+---
+
+## 📝 Commit
+
+```text
+feat: implement transaction management module with secure CRUD APIs
+```
+
+---
+
+## 📅 Progress Update
+
+- **Week 2 Progress:** 15%
+- **Overall Project Progress:** 40%
+
+---
+
 # 📅 Week 3
 
 - Dashboard Development
