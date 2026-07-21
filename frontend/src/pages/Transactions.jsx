@@ -1,33 +1,36 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import TransactionForm from "../components/transactions/TransactionForm";
 import TransactionList from "../components/transactions/TransactionList";
-
-const sampleTransactions = [
-    {
-        id: "sample-1",
-        title: "Monthly Salary",
-        amount: 50000,
-        type: "income",
-        category: "Salary",
-        description: "Monthly salary payment",
-        date: new Date().toISOString().split("T")[0],
-        paymentMethod: "bank-transfer",
-    },
-    {
-        id: "sample-2",
-        title: "Grocery Shopping",
-        amount: 1800,
-        type: "expense",
-        category: "Groceries",
-        description: "Weekly grocery purchase",
-        date: new Date().toISOString().split("T")[0],
-        paymentMethod: "upi",
-    },
-];
+import {
+    getTransactions,
+    createTransaction as apiCreateTransaction,
+    deleteTransaction as apiDeleteTransaction,
+} from "../services/transactionService";
 
 function Transactions() {
-    const [transactions, setTransactions] = useState(sampleTransactions);
+    const [transactions, setTransactions] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState("");
+
+    const fetchTransactionsData = async () => {
+        try {
+            setLoading(true);
+            const response = await getTransactions({ limit: 100 });
+            if (response.success) {
+                setTransactions(response.data);
+            }
+        } catch (err) {
+            console.error("Failed to fetch transactions:", err);
+            setError("Could not load transactions from server.");
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchTransactionsData();
+    }, []);
 
     const summary = useMemo(() => {
         return transactions.reduce(
@@ -58,14 +61,22 @@ function Transactions() {
         }).format(amount);
     };
 
-    const handleAddTransaction = (transaction) => {
-        setTransactions((previousTransactions) => [
-            transaction,
-            ...previousTransactions,
-        ]);
+    const handleAddTransaction = async (formData) => {
+        try {
+            setError("");
+            const response = await apiCreateTransaction(formData);
+            if (response.success && response.data) {
+                setTransactions((prev) => [response.data, ...prev]);
+            }
+        } catch (err) {
+            console.error("Failed to add transaction:", err);
+            setError(
+                err.response?.data?.message || "Failed to save transaction to database."
+            );
+        }
     };
 
-    const handleDeleteTransaction = (transactionId) => {
+    const handleDeleteTransaction = async (transactionId) => {
         const shouldDelete = window.confirm(
             "Are you sure you want to delete this transaction?"
         );
@@ -74,11 +85,22 @@ function Transactions() {
             return;
         }
 
-        setTransactions((previousTransactions) =>
-            previousTransactions.filter(
-                (transaction) => transaction.id !== transactionId
-            )
-        );
+        try {
+            setError("");
+            const response = await apiDeleteTransaction(transactionId);
+            if (response.success) {
+                setTransactions((prev) =>
+                    prev.filter(
+                        (t) => (t._id || t.id) !== transactionId
+                    )
+                );
+            }
+        } catch (err) {
+            console.error("Failed to delete transaction:", err);
+            setError(
+                err.response?.data?.message || "Failed to delete transaction from database."
+            );
+        }
     };
 
     return (
@@ -88,7 +110,7 @@ function Transactions() {
                     <p className="page-label">Personal Finance Dashboard</p>
                     <h1>Transaction Management</h1>
                     <p>
-                        Record and review your income and expenses from one place.
+                        Record and review your income and expenses stored securely in your MongoDB database.
                     </p>
                 </div>
 
@@ -96,6 +118,8 @@ function Transactions() {
                     Back to Dashboard
                 </Link>
             </header>
+
+            {error && <div className="form-error mb-4">{error}</div>}
 
             <section className="summary-grid">
                 <article className="summary-card">
@@ -120,10 +144,14 @@ function Transactions() {
             <section className="transactions-layout">
                 <TransactionForm onAddTransaction={handleAddTransaction} />
 
-                <TransactionList
-                    transactions={transactions}
-                    onDeleteTransaction={handleDeleteTransaction}
-                />
+                {loading ? (
+                    <div className="loading-spinner">Loading transactions...</div>
+                ) : (
+                    <TransactionList
+                        transactions={transactions}
+                        onDeleteTransaction={handleDeleteTransaction}
+                    />
+                )}
             </section>
         </main>
     );

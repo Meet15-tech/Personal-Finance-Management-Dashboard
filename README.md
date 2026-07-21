@@ -220,6 +220,15 @@ CLIENT_URL=http://localhost:5173
 | POST | /api/auth/register | User Registration |
 | POST | /api/auth/login | User Login |
 | GET | /api/auth/profile | Protected User Profile |
+| POST | /api/transactions | Create Transaction |
+| GET | /api/transactions | Get User Transactions |
+| GET | /api/transactions/:id | Get Single Transaction |
+| PUT | /api/transactions/:id | Update Transaction |
+| DELETE | /api/transactions/:id | Delete Transaction |
+| GET | /api/analytics/summary | Financial Summary KPI Stats |
+| GET | /api/analytics/category-breakdown | Expense Category Aggregation |
+| GET | /api/analytics/monthly-trend | Monthly Income vs Expense Trend |
+| GET | /api/analytics/payment-methods | Payment Method Statistics |
 
 ---
 
@@ -852,6 +861,109 @@ feat: implement transaction management module with secure CRUD APIs
 
 - **Week 2 Progress:** 15%
 - **Overall Project Progress:** 40%
+
+---
+
+# ✅ Day 9 — Dashboard Analytics & Financial Summary APIs
+
+## 📌 Objective
+
+The primary objective of Day 9 was to build the **Dashboard Analytics & Financial Summary System**, providing authenticated users with aggregated real-time financial insights, key performance indicators (KPIs), category spending breakdowns, annual income vs expense trends, and seamless frontend visualization powered by Recharts.
+
+---
+
+## 🚀 Features Implemented
+
+### Backend Analytics APIs
+
+- Built `analyticsController.js` and `analyticsRoutes.js` under `/api/analytics`.
+- Implemented MongoDB Aggregation Pipelines to compute real-time metrics efficiently.
+- Developed **Financial Summary API** (`GET /api/analytics/summary`) returning:
+  - Total Income
+  - Total Expenses
+  - Net Balance
+  - Savings Rate (%)
+  - Total Transaction Counts
+  - 5 Recent Transactions overview
+- Developed **Category Breakdown API** (`GET /api/analytics/category-breakdown`) returning category-wise totals and percentage distribution.
+- Developed **Monthly Trend API** (`GET /api/analytics/monthly-trend`) returning month-by-month income vs expense comparisons for the current year.
+- Developed **Payment Methods API** (`GET /api/analytics/payment-methods`) aggregating spending distribution across UPI, Cash, Credit Card, Debit Card, and Bank Transfers.
+- Secured all analytics endpoints using JWT Authentication middleware.
+
+---
+
+### 🎨 Frontend Analytics Dashboard & Integration
+
+- Connected `Transactions.jsx` to live MongoDB backend via `transactionService.js`.
+- Integrated `Dashboard.jsx` with real-time financial metrics from `analyticsService.js`.
+- Implemented KPI Summary Cards for Income, Expenses, Net Balance, and Savings Rate.
+- Integrated **Recharts** interactive data visualizations:
+  - **Expense Category Pie/Donut Chart** with HSL colors & percentage badges.
+  - **Monthly Income vs Expense Bar Chart** with custom tooltips & responsive containers.
+- Added Recent Transactions feed and Profile overview card on the main dashboard.
+- Maintained modern, responsive UI design system with micro-interactions and sleek aesthetics.
+
+---
+
+## 🔐 Protected API Endpoints (Day 9)
+
+| Method | Endpoint | Description |
+|---------|----------|-------------|
+| GET | `/api/analytics/summary` | Overall Financial Summary KPIs & Recent Activity |
+| GET | `/api/analytics/category-breakdown` | Category-wise spending & income percentage breakdown |
+| GET | `/api/analytics/monthly-trend` | Monthly income vs expense annual trend |
+| GET | `/api/analytics/payment-methods` | Aggregated stats by payment method |
+
+---
+
+## 🧪 Testing & Verification
+
+- ✅ Automated unit tests added in `backend/tests/analytics.validation.test.js` (6 passing tests).
+- ✅ Postman collection added (`backend/postman/PFM_Analytics_Testing.postman_collection.json`).
+- ✅ Real-time data pipeline verified with MongoDB.
+- ✅ Recharts responsive layout tested on desktop and mobile viewports.
+
+---
+
+## 📁 Updated Project Architecture
+
+```text
+backend/
+├── controllers/
+│   ├── analyticsController.js
+│   └── transactionController.js
+├── routes/
+│   ├── analyticsRoutes.js
+│   └── transactionRoutes.js
+├── tests/
+│   └── analytics.validation.test.js
+└── postman/
+    └── PFM_Analytics_Testing.postman_collection.json
+
+frontend/
+├── src/
+│   ├── pages/
+│   │   ├── Dashboard.jsx
+│   │   └── Transactions.jsx
+│   └── services/
+│       ├── analyticsService.js
+│       └── transactionService.js
+```
+
+---
+
+## 📝 Commit
+
+```text
+feat: implement dashboard analytics and financial summary APIs
+```
+
+---
+
+## 📅 Progress Update
+
+- **Week 2 Progress:** 30%
+- **Overall Project Progress:** 50%
 
 ---
 

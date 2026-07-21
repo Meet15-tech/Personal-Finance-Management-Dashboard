@@ -37,7 +37,7 @@ function TransactionList({ transactions, onDeleteTransaction }) {
             <div className="transaction-list">
                 {transactions.map((transaction) => (
                     <TransactionCard
-                        key={transaction.id}
+                        key={transaction._id || transaction.id}
                         transaction={transaction}
                         onDeleteTransaction={onDeleteTransaction}
                     />

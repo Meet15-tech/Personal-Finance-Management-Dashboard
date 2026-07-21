@@ -61,7 +61,7 @@ function TransactionCard({ transaction, onDeleteTransaction }) {
                 <button
                     className="delete-button"
                     type="button"
-                    onClick={() => onDeleteTransaction(transaction.id)}
+                    onClick={() => onDeleteTransaction(transaction._id || transaction.id)}
                 >
                     Delete
                 </button>
