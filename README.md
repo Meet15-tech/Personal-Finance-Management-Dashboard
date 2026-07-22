@@ -960,10 +960,244 @@ feat: implement dashboard analytics and financial summary APIs
 
 ---
 
+# ✅ Day 10 — Budget Management Module
+
+## 📌 Objective
+
+The objective of Day 10 was to develop the **Budget Management Module**, allowing users to create, manage, and monitor monthly budgets for different spending categories. This module lays the foundation for future financial planning, spending analysis, and budget tracking features.
+
+---
+
+## 🚀 Features Implemented
+
+### Backend Development
+
+- Designed and implemented the **Budget** MongoDB model using Mongoose.
+- Created secure JWT-protected Budget APIs.
+- Implemented complete Budget CRUD functionality.
+- Added category-wise monthly budget management.
+- Prevented duplicate budgets for the same category and month.
+- Implemented budget progress calculations based on transaction data.
+- Added proper validation and structured API responses.
+
+---
+
+## 📂 Budget Model
+
+The Budget schema includes:
+
+- User Reference
+- Budget Category
+- Monthly Budget Limit
+- Month
+- Year
+- Description
+- Created At
+- Updated At
+
+---
+
+## 🔐 Protected Budget API Endpoints
+
+| Method | Endpoint | Description |
+|---------|----------|-------------|
+| POST | `/api/budgets` | Create Budget |
+| GET | `/api/budgets` | Get All Budgets |
+| GET | `/api/budgets/:id` | Get Single Budget |
+| PUT | `/api/budgets/:id` | Update Budget |
+| DELETE | `/api/budgets/:id` | Delete Budget |
+
+All endpoints are protected using JWT Authentication.
+
+---
+
+## 💰 Budget Analytics
+
+Each budget automatically calculates:
+
+- Total Budget Limit
+- Total Amount Spent
+- Remaining Budget
+- Budget Utilization Percentage
+- Budget Status (Exceeded / Within Limit)
+
+---
+
+## 🎨 Frontend Development
+
+Developed the Budget Management interface using React.
+
+### Components Created
+
+- Budgets Page
+- Budget Form
+- Budget Card
+- Budget List
+- Dashboard Navigation
+
+---
+
+## ✨ UI Features
+
+- Create Monthly Budget Form
+- Category Selection
+- Budget Limit Input
+- Month & Year Selection
+- Budget Description
+- Budget Summary Cards
+- Budget Progress Bars
+- Remaining Budget Display
+- Delete Budget Functionality
+- Dashboard Navigation
+
+---
+
+## 📊 Budget Summary Cards
+
+Implemented summary cards displaying:
+
+- Total Budget
+- Total Spent
+- Remaining Budget
+
+These values update dynamically based on the available budget data.
+
+---
+
+## 🛡️ Backend Validation
+
+Implemented validation for:
+
+- Required Category
+- Budget Limit greater than zero
+- Valid Month (1–12)
+- Valid Year
+- Duplicate Budget Prevention
+- JWT Authentication
+
+---
+
+## 🧪 API Testing
+
+Successfully tested all Budget APIs using Postman.
+
+### Tested Endpoints
+
+- Create Budget
+- Get All Budgets
+- Get Budget By ID
+- Update Budget
+- Delete Budget
+- Unauthorized Access
+- Duplicate Budget Validation
+- Invalid Data Validation
+
+---
+
+## 🗄️ Database
+
+Successfully verified:
+
+- MongoDB Budget Collection
+- User-wise Budget Storage
+- Category-wise Monthly Budgets
+- Protected Database Access
+
+---
+
+## 📁 Project Structure
+
+### Backend
+
+```text
+backend/
+├── controllers/
+│   └── budgetController.js
+├── models/
+│   └── Budget.js
+├── routes/
+│   └── budgetRoutes.js
+```
+
+### Frontend
+
+```text
+frontend/
+├── pages/
+│   └── Budgets.jsx
+├── components/
+│   └── budgets/
+│       ├── BudgetForm.jsx
+│       ├── BudgetCard.jsx
+│       └── BudgetList.jsx
+```
+
+---
+
+## 📌 Current Status
+
+### ✅ Completed
+
+- Budget Database Model
+- Budget CRUD APIs
+- JWT Protected Routes
+- Budget Validation
+- MongoDB Integration
+- Budget Management UI
+- Budget Summary Cards
+- Budget Progress Indicators
+- API Testing
+
+### ⏳ Planned for Upcoming Days
+
+- Connect Budget UI with Backend APIs
+- Persistent Budget Storage
+- Budget Notifications
+- Savings Goal Integration
+- Financial Reports
+- Dashboard Enhancements
+
+> **Note:** The current Budget Management UI uses temporary React local state for demonstration purposes. Backend APIs and MongoDB persistence have been fully implemented and verified through Postman. Frontend-to-backend integration will be completed in a later development phase.
+
+---
+
+## 📚 Technologies Used
+
+- React.js
+- Node.js
+- Express.js
+- MongoDB
+- Mongoose
+- JWT Authentication
+- Axios
+- React Router
+- Postman
+
+---
+
+## 🎯 Learning Outcomes
+
+- Designed and implemented a complete Budget Management system.
+- Built secure RESTful CRUD APIs with JWT protection.
+- Implemented category-wise monthly budgeting.
+- Calculated budget utilization and remaining balance.
+- Developed reusable React components for budget management.
+- Strengthened understanding of financial planning workflows in MERN applications.
+
+---
+
+## 📝 Commit
+
+```text
+feat: implement budget management module
+```
+
+---
+
 ## 📅 Progress Update
 
-- **Week 2 Progress:** 30%
-- **Overall Project Progress:** 50%
+- **Week 2 Progress:** 50%
+- **Overall Project Progress:** 55%
 
 ---
 
