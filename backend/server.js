@@ -5,6 +5,7 @@ const connectDB = require("./config/db");
 const transactionRoutes = require("./routes/transactionRoutes");
 const authRoutes = require("./routes/authRoutes");
 const analyticsRoutes = require("./routes/analyticsRoutes");
+const budgetRoutes = require("./routes/budgetRoutes");
 
 dotenv.config();
 
@@ -22,6 +23,7 @@ app.use(express.json({ limit: "10kb" }));
 app.use(express.urlencoded({ extended: true }));
 app.use("/api/transactions", transactionRoutes);
 app.use("/api/analytics", analyticsRoutes);
+app.use("/api/budgets", budgetRoutes);
 
 app.get("/", (req, res) => {
   res.status(200).json({

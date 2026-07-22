@@ -6,6 +6,7 @@ import Login from "./pages/Login";
 import NotFound from "./pages/NotFound";
 import Register from "./pages/Register";
 import Transactions from "./pages/Transactions";
+import Budgets from "./pages/Budgets";
 
 function HomeRedirect() {
   const { isAuthenticated } = useAuth();
@@ -29,6 +30,7 @@ export default function App() {
       <Route element={<ProtectedRoute />}>
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/transactions" element={<Transactions />} />
+        <Route path="/budgets" element={<Budgets />} />
       </Route>
 
       <Route path="*" element={<NotFound />} />

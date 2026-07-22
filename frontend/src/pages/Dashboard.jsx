@@ -91,10 +91,25 @@ export default function Dashboard() {
                     </div>
 
                     <div className="dashboard-header-actions">
-                        <Link to="/transactions" className="manage-transactions-button">
+                        <Link
+                            to="/transactions"
+                            className="manage-transactions-button"
+                        >
                             + Manage Transactions
                         </Link>
-                        <button type="button" className="logout-button" onClick={logout}>
+
+                        <Link
+                            to="/budgets"
+                            className="manage-budgets-button"
+                        >
+                            + Manage Budgets
+                        </Link>
+
+                        <button
+                            type="button"
+                            className="logout-button"
+                            onClick={logout}
+                        >
                             Logout
                         </button>
                     </div>
