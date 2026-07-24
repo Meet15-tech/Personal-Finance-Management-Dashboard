@@ -1201,6 +1201,123 @@ feat: implement budget management module
 
 ---
 
+# ✅ Day 11 — Savings Goals Module
+
+## 📌 Objective
+
+Build a complete Savings Goals feature that allows users to create savings goals, track progress toward each goal, add contributions, view remaining amount, and monitor completion percentage.
+
+---
+
+## 🚀 Features Implemented
+
+### Backend Development
+
+- Designed and implemented the **SavingsGoal** MongoDB model using Mongoose.
+- Created secure JWT-protected Savings CRUD APIs.
+- Implemented complete Savings Goal CRUD functionality.
+- Added automated calculations for percentage completed, remaining amount, and goal status.
+- Added validation for positive target amounts, non-negative saved amounts, and future target dates.
+- Secured all endpoints using JWT middleware protection.
+
+### Frontend Development
+
+- Developed the Savings Goals page using React.
+- Created reusable components:
+  - **SavingsForm.jsx**: Input form to create goals with target date validation.
+  - **SavingsCard.jsx**: Goal visualizer with progress bar, status badges, and inline contribution input.
+  - **SavingsList.jsx**: Renders savings goals grid or empty states.
+- Implemented real-time KPI Summary Cards at the top of the page:
+  - **Total Goals**
+  - **Total Target Amount**
+  - **Total Saved**
+  - **Remaining Amount**
+- Integrated front-end with backend APIs (`savingsService.js`).
+- Integrated flat routing for `/savings` and sidebar links.
+
+---
+
+## 📂 SavingsGoal Model
+
+The SavingsGoal schema includes:
+
+- User Reference
+- Goal Name
+- Target Amount
+- Saved Amount
+- Target Date
+- Category
+- Notes
+- Created At
+- Updated At
+
+---
+
+## 🔐 Protected Savings API Endpoints
+
+| Method | Endpoint | Description |
+|---------|----------|-------------|
+| POST | `/api/savings` | Create Savings Goal |
+| GET | `/api/savings` | Get All Savings Goals |
+| GET | `/api/savings/:id` | Get Single Savings Goal |
+| PUT | `/api/savings/:id` | Update Savings Goal / Add Contribution |
+| DELETE | `/api/savings/:id` | Delete Savings Goal |
+
+All endpoints are protected using JWT Authentication.
+
+---
+
+## 🧪 API Validation & Testing
+
+- ✅ Automated unit validation tests added in `backend/tests/savings.validation.test.js` (3 passing tests).
+- ✅ Verified all CRUD endpoints (Create, Get, Update, Delete) against MongoDB database.
+
+---
+
+## 📁 Updated Project Architecture
+
+```text
+backend/
+├── controllers/
+│   └── savingsController.js
+├── models/
+│   └── SavingsGoal.js
+├── routes/
+│   └── savingsRoutes.js
+└── tests/
+    └── savings.validation.test.js
+
+frontend/
+├── src/
+│   ├── components/
+│   │   └── savings/
+│   │       ├── SavingsCard.jsx
+│   │       ├── SavingsForm.jsx
+│   │       └── SavingsList.jsx
+│   ├── pages/
+│   │   ├── Savings.css
+│   │   └── Savings.jsx
+│   └── services/
+│       └── savingsService.js
+```
+
+---
+
+## 📝 Commit
+
+```text
+feat: implement savings goals module with progress tracking and contributions
+```
+
+---
+
+## 📅 Progress Update
+
+- **Week 2 Progress:** 70%
+- **Overall Project Progress:** 60%
+
+---
+
 # 📅 Week 3
 
 - Dashboard Development
@@ -1226,7 +1343,7 @@ feat: implement budget management module
 Overall Progress
 
 ```
-██████░░░░░░░░░░░░░ 15%
+████████████░░░░░░░ 60%
 ```
 
 Week 1 Progress
