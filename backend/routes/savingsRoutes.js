@@ -8,7 +8,7 @@ const {
     deleteGoal,
 } = require("../controllers/savingsController");
 
-const protect = require("../middleware/authMiddleware");
+const { protect } = require("../middleware/authMiddleware");
 
 const router = express.Router();
 

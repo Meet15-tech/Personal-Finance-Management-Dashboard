@@ -7,7 +7,7 @@ const {
     getPaymentMethodBreakdown,
 } = require("../controllers/analyticsController");
 
-const protect = require("../middleware/authMiddleware");
+const { protect } = require("../middleware/authMiddleware");
 
 const router = express.Router();
 

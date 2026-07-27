@@ -91,18 +91,30 @@ export default function Dashboard() {
                     </div>
 
                     <div className="dashboard-header-actions">
-                        <Link
-                            to="/transactions"
-                            className="manage-transactions-button"
-                        >
+
+                        <Link to="/transactions" className="manage-transactions-button">
+
                             + Manage Transactions
+
+                        </Link>
+
+                        <Link to="/budgets" className="manage-budgets-button">
+
+                            + Manage Budgets
+
+                        </Link>
+
+                        <Link to="/savings" className="manage-savings-button">
+
+                            + Savings Goals
+
                         </Link>
 
                         <Link
-                            to="/budgets"
-                            className="manage-budgets-button"
+                            to="/reports"
+                            className="manage-reports-button"
                         >
-                            + Manage Budgets
+                            View Reports
                         </Link>
 
                         <button
