@@ -31,65 +31,6 @@ button {
   cursor: pointer;
 }
 
-.notification-stack {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  z-index: 2000;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  width: min(360px, calc(100% - 28px));
-}
-
-.notification-card {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 14px 14px 14px 16px;
-  border-radius: 14px;
-  box-shadow: 0 16px 40px rgba(16, 24, 40, 0.14);
-  border: 1px solid rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(10px);
-}
-
-.notification-card strong {
-  display: block;
-  margin-bottom: 4px;
-  font-size: 0.95rem;
-}
-
-.notification-card p {
-  margin: 0;
-  color: #475467;
-  font-size: 0.9rem;
-  line-height: 1.4;
-}
-
-.notification-success {
-  background: #ecfdf3;
-  border-color: #abe9c9;
-}
-
-.notification-error {
-  background: #fef3f2;
-  border-color: #f9b8ae;
-}
-
-.notification-warning {
-  background: #fffbeb;
-  border-color: #f6d68f;
-}
-
-.notification-close {
-  border: 0;
-  background: transparent;
-  color: #344054;
-  font-size: 1.2rem;
-  line-height: 1;
-}
-
 a {
   color: #087f5b;
   font-weight: 700;
@@ -318,13 +259,6 @@ a:hover {
   align-items: center;
   justify-content: space-between;
   gap: 24px;
-}
-
-.transactions-header-actions {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex-wrap: wrap;
 }
 
 .transactions-header h1 {
@@ -761,10 +695,6 @@ a:hover {
   .summary-grid {
     grid-template-columns: repeat(2, 1fr);
   }
-
-  .dashboard-highlight-strip {
-    grid-template-columns: 1fr;
-  }
 }
 
 @media (max-width: 600px) {
@@ -779,50 +709,6 @@ a:hover {
   justify-content: flex-end;
   flex-wrap: wrap;
   gap: 12px;
-}
-
-.dashboard-highlight-strip {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 16px;
-  margin-bottom: 24px;
-}
-
-.dashboard-highlight-card {
-  padding: 16px 18px;
-  border-radius: 16px;
-  border: 1px solid #e4e7ec;
-  background: #ffffff;
-  box-shadow: 0 10px 24px rgba(16, 24, 40, 0.04);
-}
-
-.dashboard-highlight-card span {
-  display: block;
-  color: #667085;
-  font-size: 0.8rem;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-}
-
-.dashboard-highlight-card strong {
-  display: block;
-  margin-top: 8px;
-  font-size: 1.1rem;
-}
-
-.dashboard-highlight-card.positive {
-  border-color: #abebc7;
-  background: #f2fdf7;
-}
-
-.dashboard-highlight-card.warning {
-  border-color: #f9d79c;
-  background: #fffcf1;
-}
-
-.dashboard-highlight-card.neutral {
-  border-color: #d7defc;
-  background: #f4f6ff;
 }
 
 .manage-transactions-button,

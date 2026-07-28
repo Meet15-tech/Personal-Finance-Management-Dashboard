@@ -17,7 +17,6 @@ import {
 } from "recharts";
 
 import useAuth from "../hooks/useAuth";
-import { useNotifications } from "../context/NotificationContext";
 
 import {
     getReportSummary,
@@ -27,7 +26,6 @@ import {
 } from "../services/reportService";
 
 import "./Reports.css";
-import { exportCsv, buildReportExportRows } from "../utils/exportUtils";
 
 const CHART_COLORS = [
     "#2563eb",
@@ -59,7 +57,6 @@ const MONTH_NAMES = [
 
 export default function Reports() {
     const { user } = useAuth();
-    const { addNotification } = useNotifications();
 
     const [selectedYear, setSelectedYear] = useState(
         new Date().getFullYear()
@@ -217,24 +214,71 @@ export default function Reports() {
     }, [selectedYear]);
 
     const handlePrintReport = () => {
-        addNotification({
-            type: "info",
-            title: "Preparing print view",
-            message: "The browser print dialog will open with a cleaned report layout.",
-        });
         window.print();
     };
 
     const handleExportCsv = () => {
-        exportCsv(
-            `financial-report-${selectedYear}.csv`,
-            buildReportExportRows(summary, monthlyData, categoryData, paymentMethodData, selectedYear)
-        );
-        addNotification({
-            type: "success",
-            title: "Report downloaded",
-            message: "Your financial report is ready for sharing or backup.",
+        const rows = [
+            ["Financial Report"],
+            ["Year", selectedYear],
+            [],
+            ["Summary"],
+            ["Total Income", summary.totalIncome],
+            ["Total Expenses", summary.totalExpenses],
+            ["Net Balance", summary.netBalance],
+            ["Savings Rate", `${summary.savingsRate}%`],
+            [],
+            ["Monthly Performance"],
+            ["Month", "Income", "Expense", "Net Balance"],
+            ...monthlyData.map((item) => [
+                item.month,
+                item.income,
+                item.expense,
+                item.income - item.expense,
+            ]),
+            [],
+            ["Expense Categories"],
+            ["Category", "Amount", "Percentage"],
+            ...categoryData.map((item) => [
+                item.category,
+                item.totalAmount,
+                `${item.percentage}%`,
+            ]),
+            [],
+            ["Payment Methods"],
+            ["Payment Method", "Amount"],
+            ...paymentMethodData.map((item) => [
+                item.paymentMethod,
+                item.totalAmount,
+            ]),
+        ];
+
+        const csvContent = rows
+            .map((row) =>
+                row
+                    .map((value) => {
+                        const stringValue = String(value ?? "");
+                        return `"${stringValue.replaceAll('"', '""')}"`;
+                    })
+                    .join(",")
+            )
+            .join("\n");
+
+        const blob = new Blob([csvContent], {
+            type: "text/csv;charset=utf-8;",
         });
+
+        const downloadUrl = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+
+        link.href = downloadUrl;
+        link.download = `financial-report-${selectedYear}.csv`;
+
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+        URL.revokeObjectURL(downloadUrl);
     };
 
     return (

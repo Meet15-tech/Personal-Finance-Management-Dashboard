@@ -2,16 +2,13 @@ import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import TransactionForm from "../components/transactions/TransactionForm";
 import TransactionList from "../components/transactions/TransactionList";
-import { useNotifications } from "../context/NotificationContext";
 import {
     getTransactions,
     createTransaction as apiCreateTransaction,
     deleteTransaction as apiDeleteTransaction,
 } from "../services/transactionService";
-import { exportCsv, buildTransactionExportRows } from "../utils/exportUtils";
 
 function Transactions() {
-    const { addNotification } = useNotifications();
     const [transactions, setTransactions] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
@@ -64,40 +61,18 @@ function Transactions() {
         }).format(amount);
     };
 
-    const handleExportTransactions = () => {
-        exportCsv(
-            `transactions-${new Date().toISOString().slice(0, 10)}.csv`,
-            buildTransactionExportRows(transactions, "INR")
-        );
-        addNotification({
-            type: "success",
-            title: "Export ready",
-            message: "Your transaction list has been downloaded as a CSV file.",
-        });
-    };
-
     const handleAddTransaction = async (formData) => {
         try {
             setError("");
             const response = await apiCreateTransaction(formData);
             if (response.success && response.data) {
                 setTransactions((prev) => [response.data, ...prev]);
-                addNotification({
-                    type: "success",
-                    title: "Transaction added",
-                    message: "Your new transaction is now visible in your activity feed.",
-                });
             }
         } catch (err) {
             console.error("Failed to add transaction:", err);
             setError(
                 err.response?.data?.message || "Failed to save transaction to database."
             );
-            addNotification({
-                type: "error",
-                title: "Unable to save transaction",
-                message: err.response?.data?.message || "Please try again in a moment.",
-            });
         }
     };
 
@@ -119,22 +94,12 @@ function Transactions() {
                         (t) => (t._id || t.id) !== transactionId
                     )
                 );
-                addNotification({
-                    type: "warning",
-                    title: "Transaction removed",
-                    message: "The selected transaction has been deleted from your records.",
-                });
             }
         } catch (err) {
             console.error("Failed to delete transaction:", err);
             setError(
                 err.response?.data?.message || "Failed to delete transaction from database."
             );
-            addNotification({
-                type: "error",
-                title: "Delete failed",
-                message: err.response?.data?.message || "Please try again in a moment.",
-            });
         }
     };
 
@@ -149,14 +114,9 @@ function Transactions() {
                     </p>
                 </div>
 
-                <div className="transactions-header-actions">
-                    <button type="button" className="secondary-button" onClick={handleExportTransactions}>
-                        Export CSV
-                    </button>
-                    <Link className="secondary-button" to="/dashboard">
-                        Back to Dashboard
-                    </Link>
-                </div>
+                <Link className="secondary-button" to="/dashboard">
+                    Back to Dashboard
+                </Link>
             </header>
 
             {error && <div className="form-error mb-4">{error}</div>}

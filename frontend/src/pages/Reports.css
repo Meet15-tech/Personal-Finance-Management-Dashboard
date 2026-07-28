@@ -562,9 +562,8 @@
 
     .reports-header-actions,
     .reports-year-field,
-    .reports-error-message,
-    .notification-stack {
-        display: none !important;
+    .reports-error-message {
+        display: none;
     }
 
     .reports-summary-card,
@@ -573,10 +572,5 @@
     .reports-filter-card {
         box-shadow: none;
         break-inside: avoid;
-        border-color: #d0d5dd;
-    }
-
-    .reports-page * {
-        color: #101828 !important;
     }
 }

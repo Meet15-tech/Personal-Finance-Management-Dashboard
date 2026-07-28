@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import {
     PieChart,
@@ -14,7 +14,6 @@ import {
     ResponsiveContainer,
 } from "recharts";
 import useAuth from "../hooks/useAuth";
-import { useNotifications } from "../context/NotificationContext";
 import {
     getFinancialSummary,
     getCategoryBreakdown,
@@ -28,7 +27,6 @@ const CATEGORY_COLORS = [
 
 export default function Dashboard() {
     const { user, logout } = useAuth();
-    const { addNotification } = useNotifications();
     const [summary, setSummary] = useState({
         totalIncome: 0,
         totalExpenses: 0,
@@ -82,24 +80,6 @@ export default function Dashboard() {
         }).format(amount || 0);
     };
 
-    const dashboardHighlights = useMemo(() => [
-        {
-            label: "Budget Health",
-            value: summary.totalExpenses > 0 ? `${Math.round((summary.netBalance / Math.max(summary.totalExpenses, 1)) * 100)}%` : "0%",
-            tone: summary.netBalance >= 0 ? "positive" : "warning",
-        },
-        {
-            label: "Transactions",
-            value: `${summary.totalTransactions}`,
-            tone: "neutral",
-        },
-        {
-            label: "Recent Activity",
-            value: summary.recentTransactions?.length ? `${summary.recentTransactions.length} items` : "No items yet",
-            tone: summary.recentTransactions?.length ? "positive" : "warning",
-        },
-    ], [summary]);
-
     return (
         <main className="dashboard-page">
             <section className="dashboard-shell">
@@ -148,15 +128,6 @@ export default function Dashboard() {
                 </header>
 
                 {error && <div className="form-error mb-4">{error}</div>}
-
-                <section className="dashboard-highlight-strip">
-                    {dashboardHighlights.map((item) => (
-                        <article key={item.label} className={`dashboard-highlight-card ${item.tone}`}>
-                            <span>{item.label}</span>
-                            <strong>{item.value}</strong>
-                        </article>
-                    ))}
-                </section>
 
                 {/* KPI Summary Cards */}
                 <section className="summary-grid">
