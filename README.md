@@ -1308,13 +1308,297 @@ frontend/
 ```text
 feat: implement savings goals module with progress tracking and contributions
 ```
+# ✅ Day 13 — Notifications, Data Export & Dashboard Enhancements
+
+## 📌 Objective
+
+The objective of Day 13 was to enhance the overall user experience of the Personal Finance Management Dashboard by introducing a reusable notification system, improving dashboard responsiveness, enhancing CSV export functionality, optimizing print layouts, strengthening frontend error handling, and refactoring common UI components. These improvements prepare the application for production readiness while maintaining compatibility with all previously developed modules.
+
+---
+
+## 🚀 Features Implemented
+
+### 🎨 Dashboard Improvements
+
+Enhanced the dashboard to provide a cleaner, faster, and more informative user experience.
+
+Implemented:
+
+- Improved dashboard layout and visual hierarchy
+- Quick statistics cards for financial overview
+- Responsive design improvements for different screen sizes
+- Better loading states while fetching dashboard data
+- Informative empty-state messages when no records are available
+- Improved dashboard usability and consistency
+
+---
+
+### 🔔 Notification System
+
+Developed a reusable notification component for displaying real-time feedback across the application.
+
+### Notification Types
+
+- ✅ Success Notifications
+- ❌ Error Notifications
+- ⚠️ Warning Notifications
+
+### Supported Notification Events
+
+- Transaction Added
+- Transaction Updated
+- Transaction Deleted
+- Budget Limit Exceeded
+- Savings Goal Achieved
+- Report Generated Successfully
+
+### Features
+
+- Auto-dismiss notifications
+- Reusable notification component
+- Consistent notification styling
+- Easy integration across multiple modules
+
+---
+
+### 📄 CSV Export Enhancements
+
+Improved CSV export functionality for better reporting and data management.
+
+Supported CSV Exports
+
+- Transactions
+- Monthly Reports
+- Budget Summary
+- Savings Summary
+
+### Export Improvements
+
+- Proper CSV headers
+- Cleanly formatted data
+- Consistent file structure
+- Improved file naming convention
+
+---
+
+### 🖨️ Print Layout Improvements
+
+Enhanced printable reports for a more professional appearance.
+
+Implemented:
+
+- Print-friendly report layout
+- Hidden unnecessary UI elements while printing
+- Proper page breaks
+- Improved spacing and formatting
+- Professional financial report presentation
+
+---
+
+### ♻️ Reusable Components
+
+Refactored commonly used UI elements into reusable components.
+
+Benefits:
+
+- Reduced code duplication
+- Improved maintainability
+- Consistent UI throughout the application
+- Easier future feature development
+
+---
+
+### 🛡️ Frontend Error Handling
+
+Improved application reliability through enhanced frontend error handling.
+
+Implemented:
+
+- Friendly error messages
+- Better API failure handling
+- Loading indicators during API requests
+- Empty-state UI for unavailable data
+- Graceful fallback for unexpected errors
+
+---
+
+## 📂 Components Added / Updated
+
+### Frontend Components
+
+```
+components/
+├── notifications/
+│   └── Notification.jsx
+├── dashboard/
+│   ├── StatsCard.jsx
+│   ├── LoadingState.jsx
+│   └── EmptyState.jsx
+├── export/
+│   └── ExportCSV.jsx
+└── print/
+    └── PrintLayout.jsx
+```
+
+---
+
+## 📤 CSV Export Features
+
+Implemented export functionality for:
+
+- Transaction History
+- Monthly Financial Reports
+- Budget Summary
+- Savings Goal Summary
+
+Each exported CSV includes:
+
+- Well-structured column headers
+- Properly formatted financial data
+- Download-ready files
+
+---
+
+## 🖨️ Print Enhancements
+
+Implemented print optimizations including:
+
+- Professional report formatting
+- Automatic hiding of navigation and action buttons
+- Proper page margins
+- Improved typography
+- Optimized page breaks
+
+---
+
+## 🧪 Testing
+
+Successfully verified:
+
+### Dashboard
+
+- Statistics rendering
+- Responsive layout
+- Loading states
+- Empty-state display
+
+### Notifications
+
+- Success messages
+- Error messages
+- Warning messages
+- Auto-dismiss functionality
+
+### CSV Export
+
+- Transaction Export
+- Monthly Report Export
+- Budget Export
+- Savings Export
+
+### Print
+
+- Print Preview
+- Page Formatting
+- Hidden Controls
+- Report Layout
+
+---
+
+## 📁 Project Structure
+
+### Backend
+
+```
+backend/
+├── utils/
+│   └── csvExport.js
+```
+
+### Frontend
+
+```
+frontend/
+├── components/
+│   ├── notifications/
+│   ├── dashboard/
+│   ├── export/
+│   └── print/
+├── utils/
+│   └── exportUtils.js
+```
+
+---
+
+## 📌 Current Status
+
+### ✅ Completed
+
+- Dashboard UI Improvements
+- Quick Statistics Cards
+- Responsive Dashboard
+- Loading Indicators
+- Empty-State Components
+- Reusable Notification System
+- Success, Error & Warning Notifications
+- Auto-dismiss Notifications
+- Enhanced CSV Export
+- Improved Print Layout
+- Frontend Error Handling
+- Reusable UI Components
+- Code Refactoring
+
+### ⏳ Planned for Upcoming Days
+
+- Deployment Configuration
+- Performance Optimization
+- Unit & Integration Testing
+- Security Improvements
+- Production Build
+- Final Documentation
+
+---
+
+## 📚 Technologies Used
+
+- React.js (Vite)
+- Node.js
+- Express.js
+- MongoDB
+- Mongoose
+- Axios
+- React Router
+- Recharts
+- CSS
+
+---
+
+## 🎯 Learning Outcomes
+
+- Built a reusable notification system for user feedback.
+- Enhanced dashboard usability with responsive design and quick statistics.
+- Implemented clean CSV export functionality for multiple financial modules.
+- Improved printable reports with professional formatting.
+- Strengthened frontend error handling and loading state management.
+- Refactored reusable components to improve maintainability and code quality.
+- Enhanced the overall user experience without affecting existing application functionality.
+
+---
+
+## 📝 Commit
+
+```
+feat: enhance dashboard with notifications, export improvements, print support, and reusable UI components
+```
+
+---
 
 ---
 
 ## 📅 Progress Update
 
-- **Week 2 Progress:** 70%
-- **Overall Project Progress:** 60%
+- **Week 2 Progress:** 100%
+- **Overall Project Progress:** 80%
 
 ---
 
