@@ -1,6 +1,7 @@
+require("dotenv").config();
+
 const express = require("express");
 const cors = require("cors");
-const dotenv = require("dotenv");
 const connectDB = require("./config/db");
 const transactionRoutes = require("./routes/transactionRoutes");
 const authRoutes = require("./routes/authRoutes");
@@ -8,11 +9,9 @@ const analyticsRoutes = require("./routes/analyticsRoutes");
 const budgetRoutes = require("./routes/budgetRoutes");
 const savingsRoutes = require("./routes/savingsRoutes");
 const reportRoutes = require("./routes/reportRoutes");
-
-dotenv.config();
+const plaidRoutes = require("./routes/plaidRoutes");
 
 const app = express();
-
 
 app.use(
   cors({
@@ -28,6 +27,7 @@ app.use("/api/analytics", analyticsRoutes);
 app.use("/api/budgets", budgetRoutes);
 app.use("/api/savings", savingsRoutes);
 app.use("/api/reports", reportRoutes);
+app.use("/api/plaid", plaidRoutes);
 
 app.get("/", (req, res) => {
   res.status(200).json({

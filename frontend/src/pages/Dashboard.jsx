@@ -1,5 +1,8 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import PlaidLinkButton from "../components/PlaidLinkButton";
+import ConnectedAccounts from "../components/ConnectedAccounts";
+
 import {
     PieChart,
     Pie,
@@ -51,6 +54,7 @@ export default function Dashboard() {
     const [monthlyTrend, setMonthlyTrend] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
+    const [accountsRefreshKey, setAccountsRefreshKey] = useState(0);
 
     const fetchAnalyticsData = async (showLoader = false) => {
         try {
@@ -188,6 +192,13 @@ export default function Dashboard() {
                     </div>
 
                     <div className="dashboard-header-actions">
+                        <PlaidLinkButton
+                            onAccountConnected={() => {
+                                setAccountsRefreshKey(
+                                    (currentKey) => currentKey + 1
+                                );
+                            }}
+                        />
                         <Link
                             to="/transactions"
                             className="manage-transactions-button"
@@ -225,6 +236,10 @@ export default function Dashboard() {
                         </button>
                     </div>
                 </header>
+
+                <ConnectedAccounts
+                    refreshKey={accountsRefreshKey}
+                />
 
                 {error && (
                     <div className="form-error dashboard-error">

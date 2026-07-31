@@ -64,6 +64,30 @@ const transactionSchema = new mongoose.Schema(
             ],
             default: "cash",
         },
+
+        source: {
+            type: String,
+            enum: ["manual", "plaid"],
+            default: "manual",
+        },
+
+        plaidTransactionId: {
+            type: String,
+            trim: true,
+            default: null,
+        },
+
+        plaidAccountId: {
+            type: String,
+            trim: true,
+            default: null,
+        },
+
+        merchantName: {
+            type: String,
+            trim: true,
+            default: "",
+        },
     },
     {
         timestamps: true,
@@ -73,5 +97,15 @@ const transactionSchema = new mongoose.Schema(
 transactionSchema.index({ user: 1, date: -1 });
 transactionSchema.index({ user: 1, type: 1 });
 transactionSchema.index({ user: 1, category: 1 });
+transactionSchema.index(
+    {
+        user: 1,
+        plaidTransactionId: 1,
+    },
+    {
+        unique: true,
+        sparse: true,
+    }
+);
 
 module.exports = mongoose.model("Transaction", transactionSchema);

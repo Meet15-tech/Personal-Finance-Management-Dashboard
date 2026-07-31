@@ -68,20 +68,42 @@ function Transactions() {
             fetchTransactionsData(false);
         };
 
+        const handleFinancialDataUpdated = () => {
+            fetchTransactionsData(false);
+        };
+
         const handleVisibilityChange = () => {
             if (document.visibilityState === "visible") {
                 fetchTransactionsData(false);
             }
         };
 
-        window.addEventListener("focus", handleWindowFocus);
+        window.addEventListener(
+            "focus",
+            handleWindowFocus
+        );
+
+        window.addEventListener(
+            "financialDataUpdated",
+            handleFinancialDataUpdated
+        );
+
         document.addEventListener(
             "visibilitychange",
             handleVisibilityChange
         );
 
         return () => {
-            window.removeEventListener("focus", handleWindowFocus);
+            window.removeEventListener(
+                "focus",
+                handleWindowFocus
+            );
+
+            window.removeEventListener(
+                "financialDataUpdated",
+                handleFinancialDataUpdated
+            );
+
             document.removeEventListener(
                 "visibilitychange",
                 handleVisibilityChange
