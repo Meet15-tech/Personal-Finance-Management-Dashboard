@@ -13,7 +13,9 @@ import {
     Legend,
     ResponsiveContainer,
 } from "recharts";
+
 import useAuth from "../hooks/useAuth";
+
 import {
     getFinancialSummary,
     getCategoryBreakdown,
@@ -21,12 +23,21 @@ import {
 } from "../services/analyticsService";
 
 const CATEGORY_COLORS = [
-    "#3B82F6", "#10B981", "#F59E0B", "#EF4444", "#8B5CF6",
-    "#EC4899", "#14B8A6", "#6366F1", "#84CC16", "#06B6D4",
+    "#3B82F6",
+    "#10B981",
+    "#F59E0B",
+    "#EF4444",
+    "#8B5CF6",
+    "#EC4899",
+    "#14B8A6",
+    "#6366F1",
+    "#84CC16",
+    "#06B6D4",
 ];
 
 export default function Dashboard() {
     const { user, logout } = useAuth();
+
     const [summary, setSummary] = useState({
         totalIncome: 0,
         totalExpenses: 0,
@@ -35,41 +46,116 @@ export default function Dashboard() {
         totalTransactions: 0,
         recentTransactions: [],
     });
+
     const [categoryBreakdown, setCategoryBreakdown] = useState([]);
     const [monthlyTrend, setMonthlyTrend] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
 
-    const fetchAnalyticsData = async () => {
+    const fetchAnalyticsData = async (showLoader = false) => {
         try {
-            setLoading(true);
+            if (showLoader) {
+                setLoading(true);
+            }
+
             setError("");
+
+            const currentYear = new Date().getFullYear();
 
             const [summaryRes, categoryRes, trendRes] = await Promise.all([
                 getFinancialSummary(),
                 getCategoryBreakdown("expense"),
-                getMonthlyTrend(new Date().getFullYear()),
+                getMonthlyTrend(currentYear),
             ]);
 
-            if (summaryRes.success) {
-                setSummary(summaryRes.data);
+            if (summaryRes?.success) {
+                setSummary({
+                    totalIncome: summaryRes.data?.totalIncome || 0,
+                    totalExpenses: summaryRes.data?.totalExpenses || 0,
+                    netBalance: summaryRes.data?.netBalance || 0,
+                    savingsRate: summaryRes.data?.savingsRate || 0,
+                    totalTransactions:
+                        summaryRes.data?.totalTransactions || 0,
+                    recentTransactions:
+                        summaryRes.data?.recentTransactions || [],
+                });
             }
-            if (categoryRes.success) {
-                setCategoryBreakdown(categoryRes.data);
+
+            if (categoryRes?.success) {
+                setCategoryBreakdown(categoryRes.data || []);
             }
-            if (trendRes.success) {
-                setMonthlyTrend(trendRes.data);
+
+            if (trendRes?.success) {
+                setMonthlyTrend(trendRes.data || []);
             }
         } catch (err) {
             console.error("Error loading dashboard analytics:", err);
-            setError("Unable to load real-time analytics data.");
+
+            setError(
+                err.response?.data?.message ||
+                "Unable to load financial analytics. Please try again."
+            );
         } finally {
-            setLoading(false);
+            if (showLoader) {
+                setLoading(false);
+            }
         }
     };
 
     useEffect(() => {
-        fetchAnalyticsData();
+        fetchAnalyticsData(true);
+
+        const refreshInterval = window.setInterval(() => {
+            fetchAnalyticsData(false);
+        }, 30000);
+
+        const handleWindowFocus = () => {
+            fetchAnalyticsData(false);
+        };
+
+        const handleVisibilityChange = () => {
+            if (document.visibilityState === "visible") {
+                fetchAnalyticsData(false);
+            }
+        };
+
+        const handleFinancialDataUpdated = () => {
+            fetchAnalyticsData(false);
+        };
+
+        window.addEventListener(
+            "focus",
+            handleWindowFocus
+        );
+
+        window.addEventListener(
+            "financialDataUpdated",
+            handleFinancialDataUpdated
+        );
+
+        document.addEventListener(
+            "visibilitychange",
+            handleVisibilityChange
+        );
+
+        return () => {
+            window.clearInterval(refreshInterval);
+
+            window.removeEventListener(
+                "focus",
+                handleWindowFocus
+            );
+
+            window.removeEventListener(
+                "financialDataUpdated",
+                handleFinancialDataUpdated
+            );
+
+            document.removeEventListener(
+                "visibilitychange",
+                handleVisibilityChange
+            );
+        };
     }, []);
 
     const formatCurrency = (amount) => {
@@ -77,37 +163,50 @@ export default function Dashboard() {
             style: "currency",
             currency: user?.currency || "INR",
             maximumFractionDigits: 2,
-        }).format(amount || 0);
+        }).format(Number(amount) || 0);
     };
+
+    const currentYear = new Date().getFullYear();
 
     return (
         <main className="dashboard-page">
             <section className="dashboard-shell">
                 <header className="dashboard-header">
-                    <div>
-                        <p className="dashboard-eyebrow">PFM Financial Analytics</p>
-                        <h1>Welcome back, {user?.fullName || "User"}</h1>
-                        <p>Here is your comprehensive real-time financial summary & analytics overview.</p>
+                    <div className="dashboard-header-content">
+                        <p className="dashboard-eyebrow">
+                            PFM Financial Analytics
+                        </p>
+
+                        <h1>
+                            Welcome back, {user?.fullName || "User"}
+                        </h1>
+
+                        <p>
+                            Here is your comprehensive financial summary and
+                            analytics overview.
+                        </p>
                     </div>
 
                     <div className="dashboard-header-actions">
-
-                        <Link to="/transactions" className="manage-transactions-button">
-
-                            + Manage Transactions
-
+                        <Link
+                            to="/transactions"
+                            className="manage-transactions-button"
+                        >
+                            + Transactions
                         </Link>
 
-                        <Link to="/budgets" className="manage-budgets-button">
-
-                            + Manage Budgets
-
+                        <Link
+                            to="/budgets"
+                            className="manage-budgets-button"
+                        >
+                            + Budgets
                         </Link>
 
-                        <Link to="/savings" className="manage-savings-button">
-
+                        <Link
+                            to="/savings"
+                            className="manage-savings-button"
+                        >
                             + Savings Goals
-
                         </Link>
 
                         <Link
@@ -127,66 +226,122 @@ export default function Dashboard() {
                     </div>
                 </header>
 
-                {error && <div className="form-error mb-4">{error}</div>}
+                {error && (
+                    <div className="form-error dashboard-error">
+                        {error}
 
-                {/* KPI Summary Cards */}
+                        <button
+                            type="button"
+                            className="dashboard-retry-button"
+                            onClick={() => fetchAnalyticsData(true)}
+                        >
+                            Retry
+                        </button>
+                    </div>
+                )}
+
                 <section className="summary-grid">
                     <article className="summary-card kpi-card">
                         <div className="kpi-header">
                             <p>Total Income</p>
-                            <span className="kpi-icon income-badge">↑</span>
+
+                            <span className="kpi-icon income-badge">
+                                ↑
+                            </span>
                         </div>
-                        <h2>{formatCurrency(summary.totalIncome)}</h2>
-                        <span className="income-text">Accumulated Income</span>
+
+                        <h2>
+                            {formatCurrency(summary.totalIncome)}
+                        </h2>
+
+                        <span className="income-text">
+                            Accumulated income
+                        </span>
                     </article>
 
                     <article className="summary-card kpi-card">
                         <div className="kpi-header">
                             <p>Total Expenses</p>
-                            <span className="kpi-icon expense-badge">↓</span>
+
+                            <span className="kpi-icon expense-badge">
+                                ↓
+                            </span>
                         </div>
-                        <h2>{formatCurrency(summary.totalExpenses)}</h2>
-                        <span className="expense-text">Total Outflow</span>
+
+                        <h2>
+                            {formatCurrency(summary.totalExpenses)}
+                        </h2>
+
+                        <span className="expense-text">
+                            Total outflow
+                        </span>
                     </article>
 
                     <article className="summary-card kpi-card">
                         <div className="kpi-header">
                             <p>Net Balance</p>
-                            <span className="kpi-icon balance-badge">₹</span>
+
+                            <span className="kpi-icon balance-badge">
+                                ₹
+                            </span>
                         </div>
-                        <h2>{formatCurrency(summary.netBalance)}</h2>
-                        <span>Net Savings Capital</span>
+
+                        <h2>
+                            {formatCurrency(summary.netBalance)}
+                        </h2>
+
+                        <span>Current financial balance</span>
                     </article>
 
                     <article className="summary-card kpi-card">
                         <div className="kpi-header">
                             <p>Savings Rate</p>
-                            <span className="kpi-icon savings-badge">%</span>
+
+                            <span className="kpi-icon savings-badge">
+                                %
+                            </span>
                         </div>
-                        <h2>{summary.savingsRate}%</h2>
+
+                        <h2>
+                            {Number(summary.savingsRate || 0).toFixed(2)}%
+                        </h2>
+
                         <span>
-                            {summary.savingsRate >= 0 ? "Positive Savings Ratio" : "Deficit Ratio"}
+                            {summary.savingsRate >= 0
+                                ? "Positive savings ratio"
+                                : "Deficit ratio"}
                         </span>
                     </article>
                 </section>
 
-                {/* Charts Section */}
                 {loading ? (
-                    <div className="loading-spinner my-8">Loading analytics charts...</div>
+                    <div className="loading-spinner">
+                        Loading financial analytics...
+                    </div>
                 ) : (
                     <section className="analytics-charts-grid">
-                        {/* Expense Category Breakdown Chart */}
                         <article className="analytics-chart-card">
                             <div className="section-heading">
                                 <div>
-                                    <p className="section-label">Category Analytics</p>
+                                    <p className="section-label">
+                                        Category Analytics
+                                    </p>
+
                                     <h2>Expense Distribution</h2>
                                 </div>
                             </div>
 
                             {categoryBreakdown.length > 0 ? (
-                                <div style={{ width: "100%", height: 300 }}>
-                                    <ResponsiveContainer>
+                                <div
+                                    style={{
+                                        width: "100%",
+                                        height: 300,
+                                    }}
+                                >
+                                    <ResponsiveContainer
+                                        width="100%"
+                                        height="100%"
+                                    >
                                         <PieChart>
                                             <Pie
                                                 data={categoryBreakdown}
@@ -197,89 +352,230 @@ export default function Dashboard() {
                                                 outerRadius={95}
                                                 innerRadius={45}
                                                 paddingAngle={4}
-                                                label={({ category, percentage }) => `${category} (${percentage}%)`}
+                                                label={({
+                                                    category,
+                                                    percentage,
+                                                }) =>
+                                                    `${category} (${percentage || 0}%)`
+                                                }
                                             >
-                                                {categoryBreakdown.map((entry, index) => (
-                                                    <Cell
-                                                        key={`cell-${index}`}
-                                                        fill={CATEGORY_COLORS[index % CATEGORY_COLORS.length]}
-                                                    />
-                                                ))}
+                                                {categoryBreakdown.map(
+                                                    (entry, index) => (
+                                                        <Cell
+                                                            key={
+                                                                entry.category ||
+                                                                `category-${index}`
+                                                            }
+                                                            fill={
+                                                                CATEGORY_COLORS[
+                                                                index %
+                                                                CATEGORY_COLORS.length
+                                                                ]
+                                                            }
+                                                        />
+                                                    )
+                                                )}
                                             </Pie>
+
                                             <Tooltip
-                                                formatter={(value) => formatCurrency(value)}
+                                                formatter={(value) =>
+                                                    formatCurrency(value)
+                                                }
                                             />
+
                                             <Legend />
                                         </PieChart>
                                     </ResponsiveContainer>
                                 </div>
                             ) : (
                                 <div className="empty-chart-placeholder">
-                                    <p>No expense transaction data available to plot category chart.</p>
-                                    <Link to="/transactions" className="text-link">
-                                        Add your first transaction
+                                    <h3>No expense data yet</h3>
+
+                                    <p>
+                                        Add an expense transaction to view
+                                        your category distribution.
+                                    </p>
+
+                                    <Link
+                                        to="/transactions"
+                                        className="secondary-button"
+                                    >
+                                        Add Transaction
                                     </Link>
                                 </div>
                             )}
                         </article>
-
-                        {/* Monthly Income vs Expense Trend Chart */}
                         <article className="analytics-chart-card">
                             <div className="section-heading">
                                 <div>
-                                    <p className="section-label">Annual Performance</p>
-                                    <h2>Income vs Expense Trend ({new Date().getFullYear()})</h2>
+                                    <p className="section-label">
+                                        Annual Performance
+                                    </p>
+
+                                    <h2>
+                                        Income vs Expense Trend ({currentYear})
+                                    </h2>
                                 </div>
                             </div>
 
-                            <div style={{ width: "100%", height: 300 }}>
-                                <ResponsiveContainer>
-                                    <BarChart data={monthlyTrend} margin={{ top: 20, right: 20, left: 0, bottom: 5 }}>
-                                        <CartesianGrid strokeDasharray="3 3" opacity={0.3} />
-                                        <XAxis dataKey="month" />
-                                        <YAxis tickFormatter={(v) => `₹${v}`} />
-                                        <Tooltip formatter={(value) => formatCurrency(value)} />
-                                        <Legend />
-                                        <Bar dataKey="income" name="Income" fill="#10B981" radius={[4, 4, 0, 0]} />
-                                        <Bar dataKey="expense" name="Expense" fill="#EF4444" radius={[4, 4, 0, 0]} />
-                                    </BarChart>
-                                </ResponsiveContainer>
-                            </div>
+                            {monthlyTrend.length > 0 ? (
+                                <div
+                                    style={{
+                                        width: "100%",
+                                        height: 300,
+                                    }}
+                                >
+                                    <ResponsiveContainer
+                                        width="100%"
+                                        height="100%"
+                                    >
+                                        <BarChart
+                                            data={monthlyTrend}
+                                            margin={{
+                                                top: 20,
+                                                right: 20,
+                                                left: 0,
+                                                bottom: 5,
+                                            }}
+                                        >
+                                            <CartesianGrid
+                                                strokeDasharray="3 3"
+                                                opacity={0.3}
+                                            />
+
+                                            <XAxis dataKey="month" />
+
+                                            <YAxis
+                                                tickFormatter={(value) =>
+                                                    `₹${value}`
+                                                }
+                                            />
+
+                                            <Tooltip
+                                                formatter={(value) =>
+                                                    formatCurrency(value)
+                                                }
+                                            />
+
+                                            <Legend />
+
+                                            <Bar
+                                                dataKey="income"
+                                                name="Income"
+                                                fill="#10B981"
+                                                radius={[4, 4, 0, 0]}
+                                            />
+
+                                            <Bar
+                                                dataKey="expense"
+                                                name="Expense"
+                                                fill="#EF4444"
+                                                radius={[4, 4, 0, 0]}
+                                            />
+                                        </BarChart>
+                                    </ResponsiveContainer>
+                                </div>
+                            ) : (
+                                <div className="empty-chart-placeholder">
+                                    <h3>No monthly trend data yet</h3>
+
+                                    <p>
+                                        Add income and expense transactions
+                                        to view the yearly trend.
+                                    </p>
+
+                                    <Link
+                                        to="/transactions"
+                                        className="secondary-button"
+                                    >
+                                        Add Transaction
+                                    </Link>
+                                </div>
+                            )}
                         </article>
                     </section>
                 )}
 
-                {/* Overview & Quick Table Section */}
                 <section className="dashboard-overview-grid">
                     <article className="dashboard-card recent-activity-card">
                         <div className="section-heading">
                             <div>
-                                <p className="section-label">Feed</p>
+                                <p className="section-label">Activity</p>
+
                                 <h2>Recent Transactions</h2>
                             </div>
-                            <Link to="/transactions" className="secondary-button text-xs">
+
+                            <Link
+                                to="/transactions"
+                                className="secondary-button"
+                            >
                                 View All ({summary.totalTransactions})
                             </Link>
                         </div>
 
-                        {summary.recentTransactions && summary.recentTransactions.length > 0 ? (
+                        {summary.recentTransactions?.length > 0 ? (
                             <ul className="recent-transactions-list">
                                 {summary.recentTransactions.map((item) => (
-                                    <li key={item._id} className="recent-transaction-item">
-                                        <div>
-                                            <strong>{item.title}</strong>
-                                            <div className="text-xs text-gray-500">
-                                                {item.category} • {new Date(item.date).toLocaleDateString("en-IN")}
+                                    <li
+                                        key={item._id}
+                                        className="recent-transaction-item"
+                                    >
+                                        <div className="recent-transaction-info">
+                                            <strong>
+                                                {item.title ||
+                                                    "Untitled Transaction"}
+                                            </strong>
+
+                                            <div className="transaction-meta">
+                                                <span>
+                                                    {item.category ||
+                                                        "Uncategorized"}
+                                                </span>
+
+                                                <span>•</span>
+
+                                                <span>
+                                                    {item.date
+                                                        ? new Date(
+                                                            item.date
+                                                        ).toLocaleDateString(
+                                                            "en-IN"
+                                                        )
+                                                        : "No date"}
+                                                </span>
                                             </div>
                                         </div>
-                                        <span className={`transaction-amount ${item.type === "income" ? "income-amount" : "expense-amount"}`}>
-                                            {item.type === "income" ? "+" : "-"} {formatCurrency(item.amount)}
+
+                                        <span
+                                            className={`transaction-amount ${item.type === "income"
+                                                ? "income-amount"
+                                                : "expense-amount"
+                                                }`}
+                                        >
+                                            {item.type === "income"
+                                                ? "+"
+                                                : "-"}{" "}
+                                            {formatCurrency(item.amount)}
                                         </span>
                                     </li>
                                 ))}
                             </ul>
                         ) : (
-                            <p className="text-gray-500 text-sm py-4">No recent activity recorded yet.</p>
+                            <div className="dashboard-empty-state">
+                                <h3>No recent transactions</h3>
+
+                                <p>
+                                    Add your first transaction to see
+                                    activity here.
+                                </p>
+
+                                <Link
+                                    to="/transactions"
+                                    className="secondary-button"
+                                >
+                                    Add Transaction
+                                </Link>
+                            </div>
                         )}
                     </article>
 
@@ -287,6 +583,7 @@ export default function Dashboard() {
                         <div className="section-heading">
                             <div>
                                 <p className="section-label">Account</p>
+
                                 <h2>Profile & Preferences</h2>
                             </div>
                         </div>
@@ -294,24 +591,43 @@ export default function Dashboard() {
                         <div className="account-details-list">
                             <div className="account-detail-row">
                                 <span>User Name:</span>
-                                <strong>{user?.fullName}</strong>
+
+                                <strong>
+                                    {user?.fullName || "Not provided"}
+                                </strong>
                             </div>
+
                             <div className="account-detail-row">
                                 <span>Registered Email:</span>
-                                <strong>{user?.email}</strong>
+
+                                <strong>
+                                    {user?.email || "Not provided"}
+                                </strong>
                             </div>
+
                             <div className="account-detail-row">
                                 <span>Default Currency:</span>
-                                <strong>{user?.currency || "INR"}</strong>
+
+                                <strong>
+                                    {user?.currency || "INR"}
+                                </strong>
                             </div>
+
                             <div className="account-detail-row">
                                 <span>Base Monthly Income:</span>
-                                <strong>{formatCurrency(user?.monthlyIncome)}</strong>
+
+                                <strong>
+                                    {formatCurrency(user?.monthlyIncome)}
+                                </strong>
                             </div>
+
                             <div className="account-detail-row">
                                 <span>Account Status:</span>
+
                                 <span className="status-badge-verified">
-                                    {user?.isVerified ? "Verified" : "Active Member"}
+                                    {user?.isVerified
+                                        ? "Verified"
+                                        : "Active Member"}
                                 </span>
                             </div>
                         </div>

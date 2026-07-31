@@ -1,7 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
+
 import TransactionForm from "../components/transactions/TransactionForm";
 import TransactionList from "../components/transactions/TransactionList";
+
 import {
     getTransactions,
     createTransaction as apiCreateTransaction,
@@ -11,37 +13,97 @@ import {
 function Transactions() {
     const [transactions, setTransactions] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [submitting, setSubmitting] = useState(false);
+    const [deletingId, setDeletingId] = useState("");
     const [error, setError] = useState("");
+    const [successMessage, setSuccessMessage] = useState("");
 
-    const fetchTransactionsData = async () => {
+    const notifyFinancialDataUpdated = () => {
+        const updatedAt = Date.now().toString();
+
+        localStorage.setItem("financialDataUpdatedAt", updatedAt);
+
+        window.dispatchEvent(
+            new CustomEvent("financialDataUpdated", {
+                detail: {
+                    updatedAt,
+                },
+            })
+        );
+    };
+
+    const fetchTransactionsData = async (showLoader = true) => {
         try {
-            setLoading(true);
-            const response = await getTransactions({ limit: 100 });
-            if (response.success) {
-                setTransactions(response.data);
+            if (showLoader) {
+                setLoading(true);
+            }
+
+            setError("");
+
+            const response = await getTransactions({
+                limit: 100,
+            });
+
+            if (response?.success) {
+                setTransactions(response.data || []);
             }
         } catch (err) {
             console.error("Failed to fetch transactions:", err);
-            setError("Could not load transactions from server.");
+
+            setError(
+                err.response?.data?.message ||
+                "Could not load transactions from the server."
+            );
         } finally {
-            setLoading(false);
+            if (showLoader) {
+                setLoading(false);
+            }
         }
     };
 
     useEffect(() => {
-        fetchTransactionsData();
+        fetchTransactionsData(true);
+
+        const handleWindowFocus = () => {
+            fetchTransactionsData(false);
+        };
+
+        const handleVisibilityChange = () => {
+            if (document.visibilityState === "visible") {
+                fetchTransactionsData(false);
+            }
+        };
+
+        window.addEventListener("focus", handleWindowFocus);
+        document.addEventListener(
+            "visibilitychange",
+            handleVisibilityChange
+        );
+
+        return () => {
+            window.removeEventListener("focus", handleWindowFocus);
+            document.removeEventListener(
+                "visibilitychange",
+                handleVisibilityChange
+            );
+        };
     }, []);
 
     const summary = useMemo(() => {
         return transactions.reduce(
             (totals, transaction) => {
+                const amount = Number(transaction.amount) || 0;
+
                 if (transaction.type === "income") {
-                    totals.income += transaction.amount;
-                } else {
-                    totals.expense += transaction.amount;
+                    totals.income += amount;
                 }
 
-                totals.balance = totals.income - totals.expense;
+                if (transaction.type === "expense") {
+                    totals.expense += amount;
+                }
+
+                totals.balance =
+                    totals.income - totals.expense;
 
                 return totals;
             },
@@ -58,25 +120,45 @@ function Transactions() {
             style: "currency",
             currency: "INR",
             maximumFractionDigits: 2,
-        }).format(amount);
+        }).format(Number(amount) || 0);
     };
 
     const handleAddTransaction = async (formData) => {
         try {
+            setSubmitting(true);
             setError("");
-            const response = await apiCreateTransaction(formData);
-            if (response.success && response.data) {
-                setTransactions((prev) => [response.data, ...prev]);
+            setSuccessMessage("");
+
+            const response =
+                await apiCreateTransaction(formData);
+
+            if (response?.success && response.data) {
+                setTransactions((previousTransactions) => [
+                    response.data,
+                    ...previousTransactions,
+                ]);
+
+                setSuccessMessage(
+                    "Transaction added successfully."
+                );
+
+                notifyFinancialDataUpdated();
             }
         } catch (err) {
             console.error("Failed to add transaction:", err);
+
             setError(
-                err.response?.data?.message || "Failed to save transaction to database."
+                err.response?.data?.message ||
+                "Failed to save the transaction to the database."
             );
+        } finally {
+            setSubmitting(false);
         }
     };
 
-    const handleDeleteTransaction = async (transactionId) => {
+    const handleDeleteTransaction = async (
+        transactionId
+    ) => {
         const shouldDelete = window.confirm(
             "Are you sure you want to delete this transaction?"
         );
@@ -86,20 +168,41 @@ function Transactions() {
         }
 
         try {
+            setDeletingId(transactionId);
             setError("");
-            const response = await apiDeleteTransaction(transactionId);
-            if (response.success) {
-                setTransactions((prev) =>
-                    prev.filter(
-                        (t) => (t._id || t.id) !== transactionId
+            setSuccessMessage("");
+
+            const response =
+                await apiDeleteTransaction(transactionId);
+
+            if (response?.success) {
+                setTransactions((previousTransactions) =>
+                    previousTransactions.filter(
+                        (transaction) =>
+                            (transaction._id ||
+                                transaction.id) !==
+                            transactionId
                     )
                 );
+
+                setSuccessMessage(
+                    "Transaction deleted successfully."
+                );
+
+                notifyFinancialDataUpdated();
             }
         } catch (err) {
-            console.error("Failed to delete transaction:", err);
-            setError(
-                err.response?.data?.message || "Failed to delete transaction from database."
+            console.error(
+                "Failed to delete transaction:",
+                err
             );
+
+            setError(
+                err.response?.data?.message ||
+                "Failed to delete the transaction from the database."
+            );
+        } finally {
+            setDeletingId("");
         }
     };
 
@@ -107,49 +210,104 @@ function Transactions() {
         <main className="transactions-page">
             <header className="transactions-header">
                 <div>
-                    <p className="page-label">Personal Finance Dashboard</p>
+                    <p className="page-label">
+                        Personal Finance Dashboard
+                    </p>
+
                     <h1>Transaction Management</h1>
+
                     <p>
-                        Record and review your income and expenses stored securely in your MongoDB database.
+                        Record and review your income and
+                        expenses stored securely in your
+                        MongoDB database.
                     </p>
                 </div>
 
-                <Link className="secondary-button" to="/dashboard">
+                <Link
+                    className="secondary-button"
+                    to="/dashboard"
+                >
                     Back to Dashboard
                 </Link>
             </header>
 
-            {error && <div className="form-error mb-4">{error}</div>}
+            {error && (
+                <div className="form-error">
+                    {error}
+
+                    <button
+                        type="button"
+                        className="dashboard-retry-button"
+                        onClick={() =>
+                            fetchTransactionsData(true)
+                        }
+                    >
+                        Retry
+                    </button>
+                </div>
+            )}
+
+            {successMessage && (
+                <div className="form-success">
+                    {successMessage}
+                </div>
+            )}
 
             <section className="summary-grid">
                 <article className="summary-card">
                     <p>Total Income</p>
-                    <h2>{formatCurrency(summary.income)}</h2>
-                    <span className="income-text">Money received</span>
+
+                    <h2>
+                        {formatCurrency(summary.income)}
+                    </h2>
+
+                    <span className="income-text">
+                        Money received
+                    </span>
                 </article>
 
                 <article className="summary-card">
                     <p>Total Expenses</p>
-                    <h2>{formatCurrency(summary.expense)}</h2>
-                    <span className="expense-text">Money spent</span>
+
+                    <h2>
+                        {formatCurrency(summary.expense)}
+                    </h2>
+
+                    <span className="expense-text">
+                        Money spent
+                    </span>
                 </article>
 
                 <article className="summary-card">
                     <p>Current Balance</p>
-                    <h2>{formatCurrency(summary.balance)}</h2>
+
+                    <h2>
+                        {formatCurrency(summary.balance)}
+                    </h2>
+
                     <span>Income minus expenses</span>
                 </article>
             </section>
 
             <section className="transactions-layout">
-                <TransactionForm onAddTransaction={handleAddTransaction} />
+                <TransactionForm
+                    onAddTransaction={
+                        handleAddTransaction
+                    }
+                    submitting={submitting}
+                />
 
                 {loading ? (
-                    <div className="loading-spinner">Loading transactions...</div>
+                    <div className="loading-spinner">
+                        Loading transactions...
+                    </div>
                 ) : (
                     <TransactionList
                         transactions={transactions}
-                        onDeleteTransaction={handleDeleteTransaction}
+                        onDeleteTransaction={
+                            handleDeleteTransaction
+                        }
+                        deletingId={deletingId}
                     />
                 )}
             </section>

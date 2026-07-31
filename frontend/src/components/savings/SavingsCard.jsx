@@ -1,71 +1,207 @@
 import { useState } from "react";
 
-function SavingsCard({ goal, onDelete, onUpdate }) {
-    const [contribAmount, setContribAmount] = useState("");
-    const [error, setError] = useState("");
+function SavingsCard({
+    goal,
+    onDelete,
+    onUpdate,
+    updatingId = "",
+    deletingId = "",
+    currency = "INR",
+}) {
+    const [contributionAmount, setContributionAmount] =
+        useState("");
+    const [validationError, setValidationError] =
+        useState("");
 
-    const formatCurrency = (amount) =>
-        new Intl.NumberFormat("en-IN", {
+    const goalId = goal._id || goal.id;
+
+    const targetAmount =
+        Number(goal.targetAmount) || 0;
+
+    const savedAmount =
+        Number(goal.savedAmount) || 0;
+
+    const remainingAmount =
+        goal.remainingAmount !== undefined
+            ? Number(goal.remainingAmount)
+            : Math.max(
+                targetAmount - savedAmount,
+                0
+            );
+
+    const percentageCompleted =
+        goal.percentageCompleted !== undefined
+            ? Number(goal.percentageCompleted)
+            : targetAmount > 0
+                ? (savedAmount / targetAmount) * 100
+                : 0;
+
+    const normalizedPercentage = Math.min(
+        Math.max(percentageCompleted, 0),
+        100
+    );
+
+    const isCompleted =
+        goal.status === "Completed" ||
+        savedAmount >= targetAmount;
+
+    const isUpdating = updatingId === goalId;
+    const isDeleting = deletingId === goalId;
+    const isBusy = isUpdating || isDeleting;
+
+    const formatCurrency = (amount) => {
+        return new Intl.NumberFormat("en-IN", {
             style: "currency",
-            currency: "INR",
+            currency,
             maximumFractionDigits: 0,
-        }).format(amount);
+        }).format(Number(amount) || 0);
+    };
 
-    const targetDateFormatted = new Date(goal.targetDate).toLocaleDateString("en-US", {
-        year: "numeric",
-        month: "short",
-        day: "numeric",
-    });
+    const formatTargetDate = () => {
+        if (!goal.targetDate) {
+            return "No target date";
+        }
 
-    const handleContributionSubmit = (e) => {
-        e.preventDefault();
-        setError("");
+        const date = new Date(goal.targetDate);
 
-        const amount = Number(contribAmount);
-        if (isNaN(amount) || amount <= 0) {
-            setError("Enter a positive amount");
+        if (Number.isNaN(date.getTime())) {
+            return "Invalid date";
+        }
+
+        return date.toLocaleDateString("en-IN", {
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+        });
+    };
+
+    const handleContributionSubmit = async (
+        event
+    ) => {
+        event.preventDefault();
+
+        setValidationError("");
+
+        const amount = Number(
+            contributionAmount
+        );
+
+        if (
+            Number.isNaN(amount) ||
+            amount <= 0
+        ) {
+            setValidationError(
+                "Contribution must be greater than zero."
+            );
             return;
         }
 
-        const newSavedAmount = (goal.savedAmount || 0) + amount;
-        
-        // Let's call the update handler with the new savedAmount
-        onUpdate(goal._id, { savedAmount: newSavedAmount });
-        setContribAmount("");
+        if (isCompleted) {
+            setValidationError(
+                "This savings goal is already completed."
+            );
+            return;
+        }
+
+        const updatedSavedAmount =
+            savedAmount + amount;
+
+        try {
+            await onUpdate(goalId, {
+                savedAmount:
+                    updatedSavedAmount,
+            });
+
+            setContributionAmount("");
+            setValidationError("");
+        } catch {
+            // The parent page displays the API error.
+            // Keep the amount so the user can retry.
+        }
     };
 
     return (
-        <article className={`savings-card ${goal.status === "Completed" ? "completed-goal" : ""}`}>
+        <article
+            className={`savings-card ${isCompleted
+                    ? "completed-goal"
+                    : ""
+                }`}
+        >
             <div className="savings-card-header">
                 <div>
-                    <span className="goal-category">{goal.category}</span>
-                    <h3>{goal.name}</h3>
-                    <p className="goal-date">Target Date: {targetDateFormatted}</p>
+                    <span className="goal-category">
+                        {goal.category ||
+                            "Other"}
+                    </span>
+
+                    <h3>
+                        {goal.name ||
+                            "Unnamed Goal"}
+                    </h3>
+
+                    <p className="goal-date">
+                        Target Date:{" "}
+                        {formatTargetDate()}
+                    </p>
                 </div>
 
                 <div className="header-actions">
-                    <span className={`status-badge ${goal.status === "Completed" ? "status-success" : "status-progress"}`}>
-                        {goal.status}
+                    <span
+                        className={`status-badge ${isCompleted
+                                ? "status-success"
+                                : "status-progress"
+                            }`}
+                    >
+                        {isCompleted
+                            ? "Completed"
+                            : goal.status ||
+                            "In Progress"}
                     </span>
+
                     <button
                         type="button"
                         className="delete-goal-btn"
-                        onClick={() => onDelete(goal._id)}
+                        onClick={() =>
+                            onDelete(goalId)
+                        }
+                        disabled={isBusy}
                     >
-                        Delete
+                        {isDeleting
+                            ? "Deleting..."
+                            : "Delete"}
                     </button>
                 </div>
             </div>
 
             <div className="savings-progress-section">
                 <div className="progress-info">
-                    <span>{goal.percentageCompleted}% Saved</span>
-                    <span>{formatCurrency(goal.savedAmount)} of {formatCurrency(goal.targetAmount)}</span>
+                    <span>
+                        {normalizedPercentage.toFixed(
+                            2
+                        )}
+                        % Saved
+                    </span>
+
+                    <span>
+                        {formatCurrency(
+                            savedAmount
+                        )}{" "}
+                        of{" "}
+                        {formatCurrency(
+                            targetAmount
+                        )}
+                    </span>
                 </div>
+
                 <div className="savings-progress-bar">
                     <div
-                        className={`savings-progress-bar-value ${goal.status === "Completed" ? "bg-green" : "bg-blue"}`}
-                        style={{ width: `${goal.percentageCompleted}%` }}
+                        className={`savings-progress-bar-value ${isCompleted
+                                ? "bg-green"
+                                : "bg-blue"
+                            }`}
+                        style={{
+                            width: `${normalizedPercentage}%`,
+                        }}
                     />
                 </div>
             </div>
@@ -73,23 +209,69 @@ function SavingsCard({ goal, onDelete, onUpdate }) {
             <div className="savings-details">
                 <p>
                     Remaining Amount:{" "}
-                    <strong>{formatCurrency(goal.remainingAmount)}</strong>
+                    <strong>
+                        {formatCurrency(
+                            Math.max(
+                                remainingAmount,
+                                0
+                            )
+                        )}
+                    </strong>
                 </p>
-                {goal.notes && <p className="goal-notes">“{goal.notes}”</p>}
+
+                {goal.notes && (
+                    <p className="goal-notes">
+                        {goal.notes}
+                    </p>
+                )}
             </div>
 
-            {goal.status !== "Completed" ? (
-                <form className="contribution-form" onSubmit={handleContributionSubmit}>
+            {!isCompleted ? (
+                <form
+                    className="contribution-form"
+                    onSubmit={
+                        handleContributionSubmit
+                    }
+                >
                     <input
                         type="number"
-                        min="1"
-                        placeholder="Amount"
-                        value={contribAmount}
-                        onChange={(e) => setContribAmount(e.target.value)}
+                        min="0.01"
+                        step="0.01"
+                        placeholder="Contribution amount"
+                        value={
+                            contributionAmount
+                        }
+                        onChange={(event) => {
+                            setContributionAmount(
+                                event.target.value
+                            );
+
+                            if (
+                                validationError
+                            ) {
+                                setValidationError(
+                                    ""
+                                );
+                            }
+                        }}
+                        disabled={isBusy}
                         required
                     />
-                    <button type="submit">+ Contribute</button>
-                    {error && <span className="error-text">{error}</span>}
+
+                    <button
+                        type="submit"
+                        disabled={isBusy}
+                    >
+                        {isUpdating
+                            ? "Updating..."
+                            : "+ Contribute"}
+                    </button>
+
+                    {validationError && (
+                        <span className="error-text">
+                            {validationError}
+                        </span>
+                    )}
                 </form>
             ) : (
                 <div className="goal-celebration">

@@ -159,9 +159,12 @@ export default function Reports() {
         }));
     };
 
-    const fetchReportData = async () => {
+    const fetchReportData = async (showLoader = false) => {
         try {
-            setLoading(true);
+            if (showLoader) {
+                setLoading(true);
+            }
+
             setError("");
 
             const [
@@ -176,25 +179,36 @@ export default function Reports() {
                 getReportPaymentMethods(),
             ]);
 
-            if (summaryResponse.success) {
-                setSummary(summaryResponse.data);
+            if (summaryResponse?.success) {
+                setSummary({
+                    totalIncome:
+                        Number(summaryResponse.data?.totalIncome) || 0,
+                    totalExpenses:
+                        Number(summaryResponse.data?.totalExpenses) || 0,
+                    netBalance:
+                        Number(summaryResponse.data?.netBalance) || 0,
+                    savingsRate:
+                        Number(summaryResponse.data?.savingsRate) || 0,
+                });
             }
 
-            if (categoryResponse.success) {
+            if (categoryResponse?.success) {
                 setCategoryData(
-                    prepareCategoryData(categoryResponse.data)
+                    prepareCategoryData(categoryResponse.data || [])
                 );
             }
 
-            if (monthlyResponse.success) {
+            if (monthlyResponse?.success) {
                 setMonthlyData(
-                    prepareMonthlyData(monthlyResponse.data)
+                    prepareMonthlyData(monthlyResponse.data || [])
                 );
             }
 
-            if (paymentResponse.success) {
+            if (paymentResponse?.success) {
                 setPaymentMethodData(
-                    preparePaymentMethodData(paymentResponse.data)
+                    preparePaymentMethodData(
+                        paymentResponse.data || []
+                    )
                 );
             }
         } catch (err) {
@@ -205,12 +219,66 @@ export default function Reports() {
                 "Unable to load financial reports."
             );
         } finally {
-            setLoading(false);
+            if (showLoader) {
+                setLoading(false);
+            }
         }
     };
 
     useEffect(() => {
-        fetchReportData();
+        fetchReportData(true);
+
+        const refreshInterval = window.setInterval(() => {
+            fetchReportData(false);
+        }, 30000);
+
+        const handleWindowFocus = () => {
+            fetchReportData(false);
+        };
+
+        const handleVisibilityChange = () => {
+            if (document.visibilityState === "visible") {
+                fetchReportData(false);
+            }
+        };
+
+        const handleFinancialDataUpdated = () => {
+            fetchReportData(false);
+        };
+
+        window.addEventListener(
+            "focus",
+            handleWindowFocus
+        );
+
+        window.addEventListener(
+            "financialDataUpdated",
+            handleFinancialDataUpdated
+        );
+
+        document.addEventListener(
+            "visibilitychange",
+            handleVisibilityChange
+        );
+
+        return () => {
+            window.clearInterval(refreshInterval);
+
+            window.removeEventListener(
+                "focus",
+                handleWindowFocus
+            );
+
+            window.removeEventListener(
+                "financialDataUpdated",
+                handleFinancialDataUpdated
+            );
+
+            document.removeEventListener(
+                "visibilitychange",
+                handleVisibilityChange
+            );
+        };
     }, [selectedYear]);
 
     const handlePrintReport = () => {
@@ -361,7 +429,7 @@ export default function Reports() {
 
                         <button
                             type="button"
-                            onClick={fetchReportData}
+                            onClick={() => fetchReportData(true)}
                         >
                             Try Again
                         </button>
@@ -447,7 +515,9 @@ export default function Reports() {
                                     </span>
                                 </div>
 
-                                <h2>{summary.savingsRate || 0}%</h2>
+                                <h2>
+                                    {Number(summary.savingsRate || 0).toFixed(2)}%
+                                </h2>
 
                                 <span>
                                     {summary.savingsRate >= 20
