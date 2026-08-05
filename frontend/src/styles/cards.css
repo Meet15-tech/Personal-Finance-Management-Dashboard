@@ -1,0 +1,243 @@
+/* =========================================
+   CARD SYSTEM
+========================================= */
+
+.summary-card,
+.dashboard-card,
+.analytics-chart-card,
+.transaction-card,
+.transaction-form-card,
+.transaction-list-card,
+.transaction-filter-card,
+.budget-card,
+.budget-form,
+.connected-accounts-card,
+.connected-account-item,
+.auth-card,
+.report-chart-card,
+.report-filter-card,
+.report-table-card,
+.report-summary-card,
+.savings-form,
+.savings-card {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    background: var(--surface);
+    box-shadow: var(--shadow-sm);
+}
+
+.summary-card,
+.dashboard-card,
+.analytics-chart-card,
+.transaction-card,
+.transaction-form-card,
+.transaction-list-card,
+.transaction-filter-card,
+.budget-card,
+.connected-account-item,
+.report-summary-card,
+.savings-card {
+    transition:
+        transform var(--transition),
+        box-shadow var(--transition),
+        border-color var(--transition);
+}
+
+.summary-card:hover,
+.dashboard-card:hover,
+.analytics-chart-card:hover,
+.transaction-card:hover,
+.budget-card:hover,
+.connected-account-item:hover,
+.report-summary-card:hover,
+.savings-card:hover {
+    border-color: var(--border-strong);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+}
+
+.summary-card {
+    min-width: 0;
+    padding: 1.45rem;
+}
+
+.dashboard-card,
+.analytics-chart-card,
+.transaction-form-card,
+.transaction-list-card,
+.transaction-filter-card,
+.connected-accounts-card,
+.budget-form,
+.report-chart-card,
+.report-filter-card,
+.savings-form {
+    padding: 1.5rem;
+}
+
+.transaction-card,
+.budget-card,
+.connected-account-item,
+.savings-card {
+    padding: 1.2rem;
+}
+
+.kpi-card {
+    position: relative;
+    overflow: hidden;
+}
+
+.kpi-card::after {
+    position: absolute;
+    inset: auto -30px -35px auto;
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    background: rgba(37, 99, 235, 0.045);
+    content: "";
+    pointer-events: none;
+}
+
+.kpi-header,
+.section-heading,
+.transaction-filter-header,
+.connected-accounts-header,
+.budget-card-header,
+.savings-card-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.section-heading {
+    margin-bottom: 1.25rem;
+}
+
+.section-heading h2,
+.transaction-filter-header h2,
+.connected-accounts-header h2 {
+    margin-top: 0.25rem;
+}
+
+.kpi-icon {
+    display: grid;
+    flex: 0 0 auto;
+    width: 44px;
+    height: 44px;
+    border-radius: 14px;
+    place-items: center;
+    font-size: 1rem;
+    font-weight: 800;
+}
+
+.balance-badge {
+    background: var(--primary-light);
+    color: var(--primary);
+}
+
+.savings-badge {
+    background: #f3e8ff;
+    color: #7c3aed;
+}
+
+.income-badge {
+    background: var(--success-light);
+    color: var(--success);
+}
+
+.expense-badge {
+    background: var(--danger-light);
+    color: var(--danger);
+}
+
+.card-divider {
+    height: 1px;
+    margin: 1rem 0;
+    background: var(--border);
+}
+
+.empty-state,
+.dashboard-empty-state,
+.connected-accounts-empty,
+.empty-budget-state,
+.empty-savings-state,
+.report-empty,
+.empty-chart-placeholder {
+    display: flex;
+    min-height: 220px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.65rem;
+    padding: 2rem;
+    border: 1px dashed var(--border-strong);
+    border-radius: var(--radius-md);
+    background: var(--surface-soft);
+    text-align: center;
+}
+
+.empty-state h3,
+.dashboard-empty-state h3,
+.connected-accounts-empty h3,
+.empty-budget-state h3,
+.empty-savings-state h3,
+.report-empty h3,
+.empty-chart-placeholder h3 {
+    color: var(--text);
+}
+
+.empty-state p,
+.dashboard-empty-state p,
+.connected-accounts-empty p,
+.empty-budget-state p,
+.empty-savings-state p,
+.report-empty p,
+.empty-chart-placeholder p {
+    max-width: 520px;
+}
+
+.empty-state-icon {
+    display: grid;
+    width: 58px;
+    height: 58px;
+    margin-bottom: 0.25rem;
+    border-radius: 18px;
+    background: var(--primary-light);
+    color: var(--primary);
+    place-items: center;
+    font-size: 1.35rem;
+    font-weight: 800;
+}
+
+@media (max-width: 620px) {
+
+    .summary-card,
+    .dashboard-card,
+    .analytics-chart-card,
+    .transaction-form-card,
+    .transaction-list-card,
+    .transaction-filter-card,
+    .connected-accounts-card,
+    .budget-form,
+    .report-chart-card,
+    .report-filter-card,
+    .savings-form {
+        padding: 1.15rem;
+    }
+
+    .transaction-card,
+    .budget-card,
+    .connected-account-item,
+    .savings-card {
+        padding: 1rem;
+    }
+
+    .section-heading,
+    .transaction-filter-header,
+    .connected-accounts-header,
+    .budget-card-header,
+    .savings-card-header {
+        align-items: stretch;
+        flex-direction: column;
+    }
+}

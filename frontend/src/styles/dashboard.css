@@ -1,0 +1,424 @@
+/* =========================================
+   DASHBOARD
+========================================= */
+
+.dashboard-header {
+    position: relative;
+    overflow: hidden;
+    padding: clamp(1.5rem, 3vw, 2.25rem);
+    border: 1px solid rgba(255, 255, 255, 0.24);
+    border-radius: var(--radius-xl);
+    background:
+        radial-gradient(circle at top right,
+            rgba(255, 255, 255, 0.18),
+            transparent 35%),
+        linear-gradient(135deg, #1d4ed8, #2563eb 55%, #3b82f6);
+    color: #ffffff;
+    box-shadow: 0 22px 55px rgba(37, 99, 235, 0.22);
+}
+
+.dashboard-header::after {
+    position: absolute;
+    right: -75px;
+    bottom: -105px;
+    width: 250px;
+    height: 250px;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 50%;
+    content: "";
+    pointer-events: none;
+}
+
+.dashboard-header h1 {
+    margin: 0.45rem 0 0.55rem;
+    color: #ffffff;
+    font-size: clamp(2rem, 4vw, 3rem);
+}
+
+.dashboard-header p {
+    max-width: 680px;
+    color: rgba(255, 255, 255, 0.82);
+}
+
+.dashboard-eyebrow {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.dashboard-header-actions {
+    position: relative;
+    z-index: 1;
+    max-width: 600px;
+}
+
+/* =========================================
+   SUMMARY CARDS
+========================================= */
+
+.summary-card p {
+    margin-bottom: 0.85rem;
+    color: var(--text-light);
+    font-size: 0.9rem;
+    font-weight: 650;
+}
+
+.summary-card h2 {
+    margin-bottom: 0.5rem;
+    font-size: clamp(1.6rem, 2.4vw, 2rem);
+    font-variant-numeric: tabular-nums;
+}
+
+.summary-card>span {
+    color: var(--text-muted);
+    font-size: 0.84rem;
+}
+
+.kpi-header {
+    align-items: center;
+}
+
+.kpi-card:nth-child(1) {
+    border-top: 4px solid var(--success);
+}
+
+.kpi-card:nth-child(2) {
+    border-top: 4px solid var(--danger);
+}
+
+.kpi-card:nth-child(3) {
+    border-top: 4px solid var(--primary);
+}
+
+.kpi-card:nth-child(4) {
+    border-top: 4px solid #7c3aed;
+}
+
+/* =========================================
+   CONNECTED ACCOUNTS
+========================================= */
+
+.plaid-link-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.45rem;
+}
+
+.plaid-success-message {
+    margin: 0;
+    color: #bbf7d0;
+    font-size: 0.78rem;
+    font-weight: 700;
+}
+
+.connected-accounts-card {
+    position: relative;
+    overflow: hidden;
+}
+
+.connected-accounts-card::before {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 5px;
+    height: 100%;
+    background: linear-gradient(180deg,
+            var(--primary),
+            #60a5fa);
+    content: "";
+}
+
+.connected-accounts-header {
+    margin-bottom: 1.2rem;
+    padding-left: 0.35rem;
+}
+
+.connected-accounts-header p {
+    margin-top: 0.35rem;
+    line-height: 1.55;
+}
+
+.connected-accounts-summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1.15rem;
+    padding: 1rem 1.15rem;
+    border: 1px solid #dbeafe;
+    border-radius: var(--radius-md);
+    background: linear-gradient(135deg,
+            #eff6ff,
+            #f8fbff);
+}
+
+.connected-accounts-summary span {
+    color: var(--text-light);
+    font-size: 0.9rem;
+    font-weight: 650;
+}
+
+.connected-accounts-summary strong {
+    color: var(--primary);
+    font-size: 1.35rem;
+    font-variant-numeric: tabular-nums;
+}
+
+.connected-account-item {
+    position: relative;
+    overflow: hidden;
+}
+
+.connected-account-item::after {
+    position: absolute;
+    top: -30px;
+    right: -35px;
+    width: 95px;
+    height: 95px;
+    border-radius: 50%;
+    background: rgba(37, 99, 235, 0.045);
+    content: "";
+}
+
+.connected-account-heading {
+    position: relative;
+    z-index: 1;
+    margin-bottom: 1rem;
+}
+
+.account-institution,
+.account-status-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.32rem 0.62rem;
+    border-radius: var(--radius-pill);
+    font-size: 0.72rem;
+    font-weight: 750;
+}
+
+.account-institution {
+    margin-bottom: 0.55rem;
+    background: var(--primary-light);
+    color: var(--primary);
+}
+
+.account-status-badge {
+    flex: 0 0 auto;
+    background: var(--success-light);
+    color: var(--success);
+}
+
+.connected-account-heading h3 {
+    margin-bottom: 0.3rem;
+}
+
+.connected-account-heading p {
+    color: var(--text-light);
+    font-size: 0.82rem;
+    text-transform: capitalize;
+}
+
+.account-balance-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.8rem 0;
+    border-top: 1px solid var(--border);
+}
+
+.account-balance-row span {
+    color: var(--text-light);
+    font-size: 0.85rem;
+}
+
+.account-balance-row strong {
+    color: var(--text);
+    font-size: 0.95rem;
+    font-variant-numeric: tabular-nums;
+}
+
+.plaid-sync-message,
+.plaid-error-message {
+    margin-bottom: 1rem;
+    padding: 0.85rem 1rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.86rem;
+    font-weight: 650;
+}
+
+.plaid-sync-message {
+    border: 1px solid #bbf7d0;
+    background: #f0fdf4;
+    color: #15803d;
+}
+
+.plaid-error-message {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    border: 1px solid #fecaca;
+    background: #fff7f7;
+    color: #b91c1c;
+}
+
+/* =========================================
+   CHARTS
+========================================= */
+
+.analytics-chart-card {
+    min-height: 410px;
+    overflow: hidden;
+}
+
+.analytics-chart-card .section-heading {
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border);
+}
+
+.analytics-chart-card .recharts-default-tooltip {
+    border: 1px solid var(--border) !important;
+    border-radius: var(--radius-sm) !important;
+    background: rgba(255, 255, 255, 0.97) !important;
+    box-shadow: var(--shadow-md) !important;
+}
+
+.analytics-chart-card .recharts-legend-item-text {
+    color: var(--text-light) !important;
+    font-size: 0.82rem;
+}
+
+/* =========================================
+   RECENT TRANSACTIONS
+========================================= */
+
+.recent-transaction-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.95rem 0;
+    border-bottom: 1px solid var(--border);
+}
+
+.recent-transaction-item:last-child {
+    border-bottom: 0;
+}
+
+.recent-transaction-info {
+    min-width: 0;
+}
+
+.recent-transaction-info strong {
+    display: block;
+    overflow: hidden;
+    color: var(--text);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.transaction-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: 0.3rem;
+    color: var(--text-muted);
+    font-size: 0.78rem;
+}
+
+.transaction-amount {
+    flex: 0 0 auto;
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+}
+
+/* =========================================
+   PROFILE
+========================================= */
+
+.account-detail-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.85rem 0;
+    border-bottom: 1px solid var(--border);
+}
+
+.account-detail-row:last-child {
+    border-bottom: 0;
+}
+
+.account-detail-row span:first-child {
+    color: var(--text-light);
+    font-size: 0.86rem;
+}
+
+.account-detail-row strong {
+    max-width: 65%;
+    overflow-wrap: anywhere;
+    color: var(--text);
+    text-align: right;
+}
+
+.status-badge-verified {
+    display: inline-flex;
+    padding: 0.3rem 0.65rem;
+    border-radius: var(--radius-pill);
+    background: var(--success-light);
+    color: var(--success);
+    font-size: 0.74rem;
+    font-weight: 750;
+}
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 900px) {
+    .dashboard-header-actions {
+        max-width: none;
+    }
+
+    .connected-accounts-summary {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 620px) {
+    .dashboard-header {
+        padding: 1.35rem;
+        border-radius: var(--radius-lg);
+    }
+
+    .connected-accounts-card::before {
+        width: 100%;
+        height: 4px;
+    }
+
+    .connected-accounts-header {
+        padding-left: 0;
+    }
+
+    .connected-account-heading,
+    .account-balance-row,
+    .recent-transaction-item,
+    .account-detail-row,
+    .plaid-error-message {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .account-status-badge {
+        width: 100%;
+    }
+
+    .transaction-amount,
+    .account-detail-row strong {
+        max-width: 100%;
+        text-align: left;
+    }
+}

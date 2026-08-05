@@ -1,0 +1,260 @@
+/* =========================================
+   PAGE & LAYOUT SYSTEM
+========================================= */
+
+.dashboard-page,
+.transactions-page,
+.budgets-page,
+.reports-page,
+.savings-page {
+    width: min(var(--container), calc(100% - 32px));
+    min-height: 100vh;
+    margin: 0 auto;
+    padding: var(--page-padding) 0;
+}
+
+.dashboard-shell,
+.transactions-page,
+.budgets-page,
+.reports-page,
+.savings-page {
+    display: flex;
+    flex-direction: column;
+    gap: var(--section-gap);
+}
+
+.dashboard-header,
+.transactions-header,
+.budgets-header,
+.reports-header,
+.savings-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.75rem;
+}
+
+.dashboard-header-content,
+.transactions-header>div,
+.budgets-header>div,
+.reports-header>div,
+.savings-header>div {
+    min-width: 0;
+    max-width: 760px;
+}
+
+.dashboard-header-actions,
+.connected-accounts-actions,
+.report-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.75rem;
+}
+
+.summary-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1.25rem;
+}
+
+.analytics-charts-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.5rem;
+}
+
+.dashboard-overview-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.55fr) minmax(300px, 0.85fr);
+    gap: 1.5rem;
+}
+
+.transactions-layout {
+    display: grid;
+    grid-template-columns: minmax(320px, 0.8fr) minmax(0, 1.5fr);
+    align-items: start;
+    gap: 1.5rem;
+}
+
+.transaction-filter-grid,
+.report-filter-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 1rem;
+}
+
+.budget-summary,
+.savings-summary,
+.report-summary-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.25rem;
+}
+
+.budget-list,
+.savings-list,
+.connected-accounts-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.25rem;
+}
+
+.budgets-section,
+.savings-section {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.recent-transactions-list,
+.transaction-list,
+.account-details-list {
+    display: flex;
+    flex-direction: column;
+}
+
+.recent-transactions-list {
+    gap: 0.3rem;
+}
+
+.transaction-list {
+    gap: 0.9rem;
+}
+
+.account-details-list {
+    gap: 0.35rem;
+}
+
+.loading-spinner {
+    display: grid;
+    min-height: 180px;
+    padding: 2rem;
+    color: var(--text-light);
+    font-weight: 650;
+    text-align: center;
+    place-items: center;
+}
+
+.auth-page,
+.center-page {
+    display: grid;
+    min-height: 100vh;
+    padding: 2rem 1rem;
+    place-items: center;
+}
+
+.auth-card {
+    width: min(100%, 520px);
+}
+
+.center-page {
+    text-align: center;
+}
+
+/* Keep long content from overflowing grid columns */
+
+.summary-grid>*,
+.analytics-charts-grid>*,
+.dashboard-overview-grid>*,
+.transactions-layout>*,
+.budget-summary>*,
+.savings-summary>*,
+.report-summary-grid>*,
+.budget-list>*,
+.savings-list>*,
+.connected-accounts-grid>* {
+    min-width: 0;
+}
+
+/* Sticky transaction form only on roomy desktop layouts */
+
+@media (min-width: 1101px) {
+    .transaction-form-card {
+        position: sticky;
+        top: 1.5rem;
+    }
+}
+
+@media (max-width: 1100px) {
+    .summary-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .analytics-charts-grid,
+    .dashboard-overview-grid,
+    .transactions-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .transaction-form-card {
+        position: static;
+    }
+}
+
+@media (max-width: 900px) {
+
+    .budget-list,
+    .savings-list,
+    .connected-accounts-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .budget-summary,
+    .savings-summary,
+    .report-summary-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .dashboard-header,
+    .transactions-header,
+    .budgets-header,
+    .reports-header,
+    .savings-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .dashboard-header-actions,
+    .connected-accounts-actions,
+    .report-actions {
+        width: 100%;
+        justify-content: flex-start;
+    }
+}
+
+@media (max-width: 640px) {
+    :root {
+        --page-padding: 24px;
+        --section-gap: 20px;
+    }
+
+    .dashboard-page,
+    .transactions-page,
+    .budgets-page,
+    .reports-page,
+    .savings-page {
+        width: min(100% - 20px, var(--container));
+    }
+
+    .summary-grid,
+    .budget-summary,
+    .savings-summary,
+    .report-summary-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .dashboard-header-actions,
+    .connected-accounts-actions,
+    .report-actions {
+        display: grid;
+        grid-template-columns: 1fr;
+    }
+
+    .dashboard-header-actions>*,
+    .connected-accounts-actions>*,
+    .report-actions>* {
+        width: 100%;
+    }
+}

@@ -1,0 +1,63 @@
+:root {
+    /* Brand */
+    --primary: #2563eb;
+    --primary-hover: #1d4ed8;
+    --primary-light: #dbeafe;
+    --primary-dark: #1e3a8a;
+
+    /* Status */
+    --success: #16a34a;
+    --success-light: #dcfce7;
+
+    --danger: #dc2626;
+    --danger-light: #fee2e2;
+
+    --warning: #d97706;
+    --warning-light: #fef3c7;
+
+    --info: #0891b2;
+    --info-light: #cffafe;
+
+    /* Backgrounds */
+    --background: #f6f8fc;
+    --surface: #ffffff;
+    --surface-soft: #f8fafc;
+    --surface-muted: #f1f5f9;
+
+    /* Compatibility alias used in some files */
+    --card: var(--surface);
+
+    /* Text */
+    --text: #0f172a;
+    --text-light: #64748b;
+    --text-muted: #94a3b8;
+    --text-inverse: #ffffff;
+
+    /* Borders */
+    --border: #e2e8f0;
+    --border-strong: #cbd5e1;
+
+    /* Radius */
+    --radius-xs: 8px;
+    --radius-sm: 12px;
+    --radius-md: 16px;
+    --radius-lg: 22px;
+    --radius-xl: 28px;
+    --radius-pill: 999px;
+
+    /* Shadows */
+    --shadow-xs: 0 1px 3px rgba(15, 23, 42, 0.05);
+    --shadow-sm: 0 4px 14px rgba(15, 23, 42, 0.06);
+    --shadow-md: 0 10px 30px rgba(15, 23, 42, 0.09);
+    --shadow-lg: 0 20px 50px rgba(15, 23, 42, 0.13);
+
+    /* Layout */
+    --container: 1400px;
+    --page-padding: 40px;
+    --section-gap: 28px;
+
+    /* Motion */
+    --transition-fast: 0.16s ease;
+    --transition: 0.25s ease;
+    --transition-slow: 0.45s ease;
+}

@@ -1,6 +1,12 @@
 import TransactionCard from "./TransactionCard";
 
-function TransactionList({ transactions, onDeleteTransaction }) {
+function TransactionList({
+    transactions = [],
+    onDeleteTransaction,
+    onEditTransaction,
+    deletingId = "",
+    editingId = "",
+}) {
     if (transactions.length === 0) {
         return (
             <section className="transaction-list-card">
@@ -13,8 +19,13 @@ function TransactionList({ transactions, onDeleteTransaction }) {
 
                 <div className="empty-state">
                     <div className="empty-state-icon">₹</div>
+
                     <h3>No transactions found</h3>
-                    <p>Add your first income or expense using the transaction form.</p>
+
+                    <p>
+                        Add your first income or expense using
+                        the transaction form.
+                    </p>
                 </div>
             </section>
         );
@@ -35,13 +46,25 @@ function TransactionList({ transactions, onDeleteTransaction }) {
             </div>
 
             <div className="transaction-list">
-                {transactions.map((transaction) => (
-                    <TransactionCard
-                        key={transaction._id || transaction.id}
-                        transaction={transaction}
-                        onDeleteTransaction={onDeleteTransaction}
-                    />
-                ))}
+                {transactions.map((transaction) => {
+                    const transactionId =
+                        transaction._id || transaction.id;
+
+                    return (
+                        <TransactionCard
+                            key={transactionId}
+                            transaction={transaction}
+                            onDeleteTransaction={
+                                onDeleteTransaction
+                            }
+                            onEditTransaction={
+                                onEditTransaction
+                            }
+                            deletingId={deletingId}
+                            editingId={editingId}
+                        />
+                    );
+                })}
             </div>
         </section>
     );

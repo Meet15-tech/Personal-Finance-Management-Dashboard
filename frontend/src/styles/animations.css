@@ -1,0 +1,120 @@
+/* =========================================
+   MOTION SYSTEM
+========================================= */
+
+@keyframes fade-in {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fade-up {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes soft-pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.65;
+    }
+}
+
+@keyframes progress-grow {
+    from {
+        transform: scaleX(0);
+    }
+
+    to {
+        transform: scaleX(1);
+    }
+}
+
+.dashboard-header,
+.transactions-header,
+.budgets-header,
+.reports-header,
+.savings-header {
+    animation: fade-up 0.45s ease both;
+}
+
+.summary-card,
+.analytics-chart-card,
+.dashboard-card,
+.connected-accounts-card,
+.transaction-filter-card,
+.transaction-form-card,
+.transaction-list-card,
+.budget-form,
+.budget-card,
+.savings-form,
+.savings-card,
+.report-filter-card,
+.report-chart-card,
+.report-table-card {
+    animation: fade-up 0.42s ease both;
+}
+
+.summary-card:nth-child(2),
+.budget-card:nth-child(2),
+.savings-card:nth-child(2) {
+    animation-delay: 0.04s;
+}
+
+.summary-card:nth-child(3),
+.budget-card:nth-child(3),
+.savings-card:nth-child(3) {
+    animation-delay: 0.08s;
+}
+
+.summary-card:nth-child(4),
+.budget-card:nth-child(4),
+.savings-card:nth-child(4) {
+    animation-delay: 0.12s;
+}
+
+.budget-progress-value,
+.savings-progress-value {
+    transform-origin: left center;
+    animation: progress-grow 0.7s ease both;
+}
+
+.loading-spinner {
+    animation: soft-pulse 1.4s ease-in-out infinite;
+}
+
+.plaid-success-message,
+.plaid-sync-message,
+.form-success,
+.form-error,
+.alert {
+    animation: fade-in 0.25s ease both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        scroll-behavior: auto !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}

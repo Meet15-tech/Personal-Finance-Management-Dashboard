@@ -25,7 +25,7 @@ import {
     getReportPaymentMethods,
 } from "../services/reportService";
 
-import "./Reports.css";
+
 
 const CHART_COLORS = [
     "#2563eb",

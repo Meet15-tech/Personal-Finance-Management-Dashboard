@@ -10,7 +10,6 @@ import {
     deleteBudget as apiDeleteBudget,
 } from "../services/budgetService";
 
-import "./Budgets.css";
 
 function Budgets() {
     const [budgets, setBudgets] = useState([]);

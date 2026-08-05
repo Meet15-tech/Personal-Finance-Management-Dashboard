@@ -12,7 +12,6 @@ import {
     deleteSavingsGoal,
 } from "../services/savingsService";
 
-import "./Savings.css";
 
 function Savings() {
     const { user } = useAuth();

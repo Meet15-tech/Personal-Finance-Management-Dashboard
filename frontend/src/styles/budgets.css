@@ -1,0 +1,321 @@
+/* =========================================
+   BUDGETS PAGE
+========================================= */
+
+.budgets-header {
+    position: relative;
+    overflow: hidden;
+    padding: clamp(1.5rem, 3vw, 2.1rem);
+    border-radius: var(--radius-xl);
+    background:
+        radial-gradient(circle at top right,
+            rgba(255, 255, 255, 0.16),
+            transparent 34%),
+        linear-gradient(135deg, #047857, #059669 58%, #34d399);
+    color: #ffffff;
+    box-shadow: 0 20px 48px rgba(5, 150, 105, 0.2);
+}
+
+.budgets-header h1 {
+    margin: 0.4rem 0 0.55rem;
+    color: #ffffff;
+    font-size: clamp(2rem, 4vw, 2.85rem);
+}
+
+.budgets-header p {
+    max-width: 680px;
+    color: rgba(255, 255, 255, 0.84);
+}
+
+.budgets-header .page-label {
+    color: rgba(255, 255, 255, 0.92);
+}
+
+/* =========================================
+   SUMMARY
+========================================= */
+
+.budget-summary article {
+    position: relative;
+    overflow: hidden;
+    padding: 1.45rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    background: var(--surface);
+    box-shadow: var(--shadow-sm);
+    transition:
+        transform var(--transition),
+        box-shadow var(--transition),
+        border-color var(--transition);
+}
+
+.budget-summary article:hover {
+    border-color: var(--border-strong);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+}
+
+.budget-summary article::after {
+    position: absolute;
+    right: -30px;
+    bottom: -35px;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: rgba(5, 150, 105, 0.05);
+    content: "";
+}
+
+.budget-summary span {
+    display: block;
+    margin-bottom: 0.65rem;
+    color: var(--text-light);
+    font-size: 0.88rem;
+    font-weight: 650;
+}
+
+.budget-summary strong {
+    color: var(--text);
+    font-size: clamp(1.5rem, 2.4vw, 1.95rem);
+    font-variant-numeric: tabular-nums;
+}
+
+/* =========================================
+   FORM
+========================================= */
+
+.budget-form {
+    position: relative;
+    overflow: hidden;
+}
+
+.budget-form::before {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, #059669, #34d399);
+    content: "";
+}
+
+.budget-form h2 {
+    margin-bottom: 1.35rem;
+}
+
+.budget-form-grid {
+    margin-bottom: 1rem;
+}
+
+.budget-form>.form-group {
+    margin-top: 0.25rem;
+}
+
+.budget-form>button {
+    width: 100%;
+    margin-top: 1.1rem;
+    background: #059669;
+    color: #ffffff;
+    box-shadow: 0 8px 18px rgba(5, 150, 105, 0.18);
+}
+
+.budget-form>button:hover:not(:disabled) {
+    background: #047857;
+    box-shadow: 0 10px 22px rgba(5, 150, 105, 0.24);
+    transform: translateY(-1px);
+}
+
+/* =========================================
+   SECTION
+========================================= */
+
+.budgets-section>h2 {
+    margin-bottom: 0.25rem;
+}
+
+/* =========================================
+   CARD
+========================================= */
+
+.budget-card {
+    position: relative;
+    overflow: hidden;
+}
+
+.budget-card::before {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: #10b981;
+    content: "";
+}
+
+.budget-card-exceeded::before {
+    background: var(--danger);
+}
+
+.budget-card-exceeded {
+    border-color: #fecaca;
+    background: linear-gradient(135deg,
+            #ffffff,
+            #fffafa);
+}
+
+.budget-card-header {
+    margin-bottom: 0.9rem;
+    padding-left: 0.35rem;
+}
+
+.budget-card-header h3 {
+    margin-bottom: 0.3rem;
+    color: var(--text);
+}
+
+.budget-card-header p {
+    color: var(--text-light);
+    font-size: 0.84rem;
+}
+
+.budget-card-header button {
+    min-height: 34px;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid #fecaca;
+    border-radius: var(--radius-xs);
+    background: #fff7f7;
+    color: var(--danger);
+    font-size: 0.8rem;
+    font-weight: 750;
+}
+
+.budget-card-header button:hover:not(:disabled) {
+    background: var(--danger);
+    color: #ffffff;
+}
+
+.budget-description {
+    margin-bottom: 1rem;
+    padding-left: 0.35rem;
+    color: var(--text-light);
+    font-size: 0.87rem;
+    line-height: 1.55;
+}
+
+/* =========================================
+   PROGRESS
+========================================= */
+
+.budget-progress {
+    width: 100%;
+    height: 10px;
+    margin: 1rem 0 0.7rem;
+    overflow: hidden;
+    border-radius: var(--radius-pill);
+    background: var(--surface-muted);
+}
+
+.budget-progress-value {
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(90deg,
+            #059669,
+            #34d399);
+    transition: width var(--transition-slow);
+}
+
+.budget-progress-exceeded {
+    background: linear-gradient(90deg,
+            #dc2626,
+            #ef4444);
+}
+
+.budget-percentage-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.budget-percentage-row span {
+    color: var(--text-light);
+    font-size: 0.84rem;
+}
+
+.budget-percentage-row strong {
+    color: var(--text);
+    font-size: 0.9rem;
+    font-variant-numeric: tabular-nums;
+}
+
+.budget-details {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.9rem 0;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    color: var(--text-light);
+    font-size: 0.84rem;
+}
+
+.budget-remaining {
+    margin-top: 0.9rem;
+    color: var(--text-light);
+}
+
+.budget-remaining strong {
+    color: var(--text);
+    font-variant-numeric: tabular-nums;
+}
+
+.budget-warning {
+    margin-top: 0.9rem;
+    padding: 0.8rem 0.9rem;
+    border: 1px solid #fecaca;
+    border-radius: var(--radius-sm);
+    background: #fff7f7;
+    color: #b91c1c;
+    font-size: 0.84rem;
+    font-weight: 700;
+}
+
+/* =========================================
+   EMPTY STATE
+========================================= */
+
+.empty-budget-state {
+    min-height: 280px;
+}
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 620px) {
+    .budgets-header {
+        padding: 1.3rem;
+        border-radius: var(--radius-lg);
+    }
+
+    .budget-card::before {
+        width: 100%;
+        height: 4px;
+    }
+
+    .budget-card-header {
+        padding-left: 0;
+    }
+
+    .budget-card-header button {
+        width: 100%;
+    }
+
+    .budget-details {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 0.4rem;
+    }
+}

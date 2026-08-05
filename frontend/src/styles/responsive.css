@@ -1,0 +1,257 @@
+/* =========================================
+   RESPONSIVE SYSTEM
+========================================= */
+
+@media (max-width: 1200px) {
+    :root {
+        --container: 1180px;
+    }
+
+    .dashboard-header-actions {
+        max-width: none;
+    }
+
+    .summary-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 1024px) {
+
+    .analytics-charts-grid,
+    .dashboard-overview-grid,
+    .transactions-layout,
+    .report-insights {
+        grid-template-columns: 1fr;
+    }
+
+    .transaction-form-card {
+        position: static;
+    }
+
+    .dashboard-header,
+    .transactions-header,
+    .budgets-header,
+    .reports-header,
+    .savings-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .dashboard-header-actions,
+    .connected-accounts-actions,
+    .report-actions {
+        width: 100%;
+        justify-content: flex-start;
+    }
+}
+
+@media (max-width: 900px) {
+
+    .budget-list,
+    .savings-list,
+    .connected-accounts-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .budget-summary,
+    .savings-summary,
+    .report-summary-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .analytics-chart-card,
+    .report-chart-card {
+        min-height: 360px;
+    }
+}
+
+@media (max-width: 760px) {
+    :root {
+        --page-padding: 28px;
+        --section-gap: 22px;
+    }
+
+    .dashboard-page,
+    .transactions-page,
+    .budgets-page,
+    .reports-page,
+    .savings-page {
+        width: min(100% - 24px, var(--container));
+    }
+
+    .summary-grid,
+    .budget-summary,
+    .savings-summary,
+    .report-summary-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .dashboard-header-actions,
+    .connected-accounts-actions,
+    .report-actions {
+        display: grid;
+        grid-template-columns: 1fr;
+    }
+
+    .dashboard-header-actions>*,
+    .connected-accounts-actions>*,
+    .report-actions>* {
+        width: 100%;
+    }
+
+    .connected-accounts-summary,
+    .recent-transaction-item,
+    .account-detail-row,
+    .budget-details,
+    .savings-progress-row {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .account-detail-row strong,
+    .insight-item strong {
+        max-width: 100%;
+        text-align: left;
+    }
+
+    .analytics-chart-card,
+    .report-chart-card {
+        min-height: 330px;
+    }
+
+    .recharts-wrapper,
+    .recharts-surface {
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 620px) {
+    :root {
+        --page-padding: 22px;
+        --section-gap: 18px;
+    }
+
+    body {
+        background: var(--background);
+    }
+
+    .dashboard-page,
+    .transactions-page,
+    .budgets-page,
+    .reports-page,
+    .savings-page {
+        width: min(100% - 18px, var(--container));
+    }
+
+    .dashboard-header,
+    .transactions-header,
+    .budgets-header,
+    .reports-header,
+    .savings-header {
+        padding: 1.25rem;
+        border-radius: var(--radius-lg);
+    }
+
+    .dashboard-header h1,
+    .transactions-header h1,
+    .budgets-header h1,
+    .reports-header h1,
+    .savings-header h1 {
+        font-size: 1.85rem;
+    }
+
+    .summary-card,
+    .dashboard-card,
+    .analytics-chart-card,
+    .transaction-form-card,
+    .transaction-list-card,
+    .transaction-filter-card,
+    .connected-accounts-card,
+    .budget-form,
+    .report-chart-card,
+    .report-filter-card,
+    .savings-form {
+        padding: 1rem;
+        border-radius: var(--radius-md);
+    }
+
+    .transaction-card,
+    .budget-card,
+    .connected-account-item,
+    .savings-card {
+        padding: 0.95rem;
+        border-radius: var(--radius-md);
+    }
+
+    .transaction-filter-grid,
+    .report-filter-grid,
+    .form-grid,
+    .budget-form-grid,
+    .savings-form-grid,
+    .transaction-form {
+        grid-template-columns: 1fr;
+    }
+
+    .transaction-action-buttons,
+    .transaction-form-actions,
+    .savings-card-actions,
+    .savings-contribution-form {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .transaction-action-buttons>*,
+    .transaction-form-actions>*,
+    .savings-card-actions>*,
+    .savings-contribution-form>* {
+        width: 100%;
+    }
+
+    .transaction-card {
+        grid-template-columns: 1fr;
+    }
+
+    .transaction-actions {
+        align-items: stretch;
+        padding-top: 0.8rem;
+        border-top: 1px solid var(--border);
+    }
+
+    .transaction-amount {
+        text-align: left;
+    }
+
+    .report-table {
+        min-width: 680px;
+    }
+}
+
+@media (max-width: 420px) {
+
+    .dashboard-page,
+    .transactions-page,
+    .budgets-page,
+    .reports-page,
+    .savings-page {
+        width: min(100% - 14px, var(--container));
+    }
+
+    .summary-card h2,
+    .budget-summary strong,
+    .savings-summary strong,
+    .report-summary-card strong {
+        font-size: 1.45rem;
+    }
+
+    .kpi-icon,
+    .transaction-icon {
+        width: 42px;
+        height: 42px;
+        border-radius: 13px;
+    }
+
+    .connected-accounts-summary strong {
+        font-size: 1.15rem;
+    }
+}

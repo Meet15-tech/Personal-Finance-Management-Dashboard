@@ -1,0 +1,255 @@
+/* =========================================
+   BUTTON SYSTEM
+========================================= */
+
+button,
+.button,
+.primary-button,
+.secondary-button,
+.edit-button,
+.delete-button,
+.manage-transactions-button,
+.manage-budgets-button,
+.manage-savings-button,
+.manage-reports-button,
+.plaid-connect-button,
+.sync-transactions-button,
+.refresh-accounts-button,
+.logout-button,
+.dashboard-retry-button,
+.clear-filters-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.55rem;
+    min-height: 44px;
+    padding: 0.72rem 1.05rem;
+    border: 1px solid transparent;
+    border-radius: var(--radius-sm);
+    font-weight: 700;
+    line-height: 1;
+    text-align: center;
+    white-space: nowrap;
+    transition:
+        transform var(--transition-fast),
+        box-shadow var(--transition-fast),
+        background-color var(--transition-fast),
+        border-color var(--transition-fast),
+        color var(--transition-fast);
+}
+
+button:hover:not(:disabled),
+.button:hover:not(:disabled),
+.primary-button:hover:not(:disabled),
+.secondary-button:hover:not(:disabled),
+.edit-button:hover:not(:disabled),
+.delete-button:hover:not(:disabled),
+.manage-transactions-button:hover,
+.manage-budgets-button:hover,
+.manage-savings-button:hover,
+.manage-reports-button:hover,
+.plaid-connect-button:hover:not(:disabled),
+.sync-transactions-button:hover:not(:disabled),
+.refresh-accounts-button:hover:not(:disabled),
+.logout-button:hover:not(:disabled),
+.dashboard-retry-button:hover:not(:disabled),
+.clear-filters-button:hover:not(:disabled) {
+    transform: translateY(-1px);
+}
+
+button:active:not(:disabled),
+.button:active:not(:disabled),
+.primary-button:active:not(:disabled),
+.secondary-button:active:not(:disabled) {
+    transform: translateY(0);
+}
+
+button:disabled,
+.button:disabled,
+.primary-button:disabled,
+.secondary-button:disabled,
+.edit-button:disabled,
+.delete-button:disabled,
+.plaid-connect-button:disabled,
+.sync-transactions-button:disabled,
+.refresh-accounts-button:disabled,
+.logout-button:disabled {
+    cursor: not-allowed;
+    opacity: 0.58;
+    transform: none;
+    box-shadow: none;
+}
+
+/* Primary */
+
+.primary-button,
+.manage-transactions-button,
+.sync-transactions-button {
+    background: var(--primary);
+    color: var(--text-inverse);
+    box-shadow: 0 8px 18px rgba(37, 99, 235, 0.18);
+}
+
+.primary-button:hover:not(:disabled),
+.manage-transactions-button:hover,
+.sync-transactions-button:hover:not(:disabled) {
+    background: var(--primary-hover);
+    color: var(--text-inverse);
+    text-decoration: none;
+    box-shadow: 0 10px 22px rgba(37, 99, 235, 0.24);
+}
+
+/* Secondary */
+
+.secondary-button,
+.refresh-accounts-button,
+.clear-filters-button {
+    border-color: var(--border-strong);
+    background: var(--surface);
+    color: var(--text);
+    box-shadow: var(--shadow-xs);
+}
+
+.secondary-button:hover:not(:disabled),
+.refresh-accounts-button:hover:not(:disabled),
+.clear-filters-button:hover:not(:disabled) {
+    border-color: #94a3b8;
+    background: var(--surface-soft);
+    color: var(--text);
+    text-decoration: none;
+    box-shadow: var(--shadow-sm);
+}
+
+/* Feature actions */
+
+.manage-budgets-button {
+    background: #0f9f6e;
+    color: #ffffff;
+    box-shadow: 0 8px 18px rgba(15, 159, 110, 0.18);
+}
+
+.manage-budgets-button:hover {
+    background: #087f5b;
+    color: #ffffff;
+    text-decoration: none;
+    box-shadow: 0 10px 22px rgba(15, 159, 110, 0.24);
+}
+
+.manage-savings-button {
+    background: #7c3aed;
+    color: #ffffff;
+    box-shadow: 0 8px 18px rgba(124, 58, 237, 0.18);
+}
+
+.manage-savings-button:hover {
+    background: #6d28d9;
+    color: #ffffff;
+    text-decoration: none;
+    box-shadow: 0 10px 22px rgba(124, 58, 237, 0.24);
+}
+
+.manage-reports-button {
+    background: #0f766e;
+    color: #ffffff;
+    box-shadow: 0 8px 18px rgba(15, 118, 110, 0.18);
+}
+
+.manage-reports-button:hover {
+    background: #115e59;
+    color: #ffffff;
+    text-decoration: none;
+    box-shadow: 0 10px 22px rgba(15, 118, 110, 0.24);
+}
+
+/* Plaid */
+
+.plaid-connect-button {
+    background: #111827;
+    color: #ffffff;
+    box-shadow: 0 8px 18px rgba(17, 24, 39, 0.18);
+}
+
+.plaid-connect-button:hover:not(:disabled) {
+    background: #1f2937;
+    box-shadow: 0 10px 22px rgba(17, 24, 39, 0.24);
+}
+
+/* Edit */
+
+.edit-button {
+    min-height: 36px;
+    padding: 0.55rem 0.78rem;
+    border-color: #bfdbfe;
+    background: #eff6ff;
+    color: #1d4ed8;
+    font-size: 0.82rem;
+}
+
+.edit-button:hover:not(:disabled) {
+    border-color: #93c5fd;
+    background: #dbeafe;
+}
+
+/* Delete */
+
+.delete-button,
+.logout-button {
+    min-height: 36px;
+    padding: 0.55rem 0.78rem;
+    border-color: #fecaca;
+    background: #fff7f7;
+    color: var(--danger);
+    font-size: 0.82rem;
+}
+
+.delete-button:hover:not(:disabled),
+.logout-button:hover:not(:disabled) {
+    border-color: #fca5a5;
+    background: var(--danger);
+    color: #ffffff;
+}
+
+/* Retry */
+
+.dashboard-retry-button {
+    min-height: 34px;
+    padding: 0.5rem 0.75rem;
+    border-color: currentColor;
+    background: transparent;
+    color: inherit;
+    font-size: 0.82rem;
+}
+
+.dashboard-retry-button:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.45);
+}
+
+/* Links that behave like buttons */
+
+a.primary-button,
+a.secondary-button,
+a.manage-transactions-button,
+a.manage-budgets-button,
+a.manage-savings-button,
+a.manage-reports-button {
+    text-decoration: none;
+}
+
+/* Mobile */
+
+@media (max-width: 620px) {
+
+    .dashboard-header-actions,
+    .connected-accounts-actions,
+    .transaction-form-actions,
+    .transaction-action-buttons {
+        width: 100%;
+    }
+
+    .dashboard-header-actions>*,
+    .connected-accounts-actions>*,
+    .transaction-form-actions>* {
+        flex: 1 1 100%;
+        width: 100%;
+    }
+}
